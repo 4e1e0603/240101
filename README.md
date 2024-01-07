@@ -1,6 +1,6 @@
-# OrderService
+# meiro-orders
 
-**work-in-progress**
+(work-in-progress)
 
 Music for code review:
 
