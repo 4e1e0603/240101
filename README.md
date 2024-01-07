@@ -2,7 +2,7 @@
 
 **work-in-progress**
 
-Music for code review: 
+Music for code review:
 
 - [*The Legend of Zelda: Breath of The Wild (2017)*](https://youtu.be/Hgd8aYjE0Bs?si=UeVbTcC4kLQvykVT)
 - [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack (2001)*](https://youtu.be/ZUd7myd0NK8?si=BM32dlPiFP9iO1-m)
@@ -35,19 +35,30 @@ python -m pip install -e .
 python -m pip install -r requirements.txt
 ```
 
-We use `mypy` for type checking.
+We use [`mypy`](https://mypy-lang.org/) for type checking.
 
 ```powershell
 mypy --show-error-codes .
 ```
 
-We use `ruff` for formating and linting.
+We use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
 
 ```powershell
 ruff format .
 ruff check --fix .
 ```
 
+### Tests
+
+```shell
+pytest                          # Run all tests.
+pytest -m domain                # Run domain (unit) tests.
+```
+
+### Versions
+
+We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
+  
 ## Usage
 
 The package contains simple command line interface
@@ -98,12 +109,7 @@ Doménová vrstva neobsahuje žádné vstupně/výstupní funkce (metody) a lze 
 
 &hellip;
 
-### Testování
-
-```shell
-pytest                          # Run all tests.
-pytest -m domain                # Run domain (unit) tests.
-```
+### Verzování
 
 ### Poznámky
 
