@@ -4,8 +4,8 @@
 
 Music for code review:
 
-- [*The Legend of Zelda: Breath of The Wild (2017)*](https://youtu.be/Hgd8aYjE0Bs?si=UeVbTcC4kLQvykVT)
-- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack (2001)*](https://youtu.be/ZUd7myd0NK8?si=BM32dlPiFP9iO1-m)
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Revolver Ocelot (2001)*](https://youtu.be/rEwb5mXxOls?si=vytNUV_jnK-t-Qql)
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Countdown to Disaster (2001)*](https://youtu.be/z31HzRBW1qU?si=hqTfjFFpTxwpxg_-)
 
 ## Installation
 
