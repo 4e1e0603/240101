@@ -51,53 +51,66 @@ The package contains simple command line interface
 
 ```powershell
 meiro-orders --insert [file_path]
-meiro-orders (search users)
-meiro-orders (search orders)   
+meiro-orders (search users) // NOT IMPLEMENTED
+meiro-orders (search orders) // NOT IMPLEMENTED   
 ```
+
+---
 
 ## Assignment (cs)
 
-- Vytvoř třídu `OrdersService`, která bude poskytovat následující rozhraní (veřejné metody):
-  - [ ] Načtení záznamů ze vstupního souboru a jejich uložení do **relační** databáze s vhodným databázovým modelem (cesta k souboru předaná parametrem).
-    - Charakter vstupního souboru (data.ndjson):
-      - V každém řádku se nachází denormalizovaná data objednávek uživatelů.
-      - Atributy uživatelů a produktů (id, name, price, city) se napříč souborem nemění.
-  - [ ] Získání objednávek za daný časový úsek (časový úsek předán parametrem).
-  - [ ] Získání uživatelů, kteří nakoupili za celou historii nejvíce produktů (počet uživatelů předán parametrem).
+- Vytvoř třídu `OrdersService`, která bude poskytovat následující rozhraní:
+  - Načtení záznamů ze vstupního souboru `data/orders.jsonl` a jejich uložení do **relační** databáze s vhodným databázovým modelem (cesta k souboru předaná parametrem).
+    - V každém řádku se nachází data objednávek uživatelů.
+    - Atributy uživatelů a produktů se napříč souborem nemění.
+  - Získání objednávek za daný časový úsek (časový úsek předán parametrem).
+  - Získání uživatelů, kteří nakoupili za celou historii nejvíce produktů (počet uživatelů předán parametrem).
 
-- Poznámky k implementaci:
-  - Pro demonstraci kódu není třeba žádné UI ani API. Vše stačí zavolat v main.py souboru a výsledek vypsat na standardní výstup.
-  - Důkladný OOP návrh je pro hodnocení klíčový. Dbej na to, aby byl výsledný kód znovupoužitelný a snadno rozšiřitelný.
-  - [x] Použij statické typování (<https://docs.python.org/3/library/typing.html>).
-    - mypy, ruff
-  - [ ] Testy nejsou povinné, ale kód musí být napsán tak, aby na něj bylo možné testy snadno napsat.
-    - pytest
-  - [ ] Nezapomeň na ošetření vnějších vstupů.
-  - [x] Výsledné řešení ulož do veřejného Git repozitáře.
+Poznámky k implementaci:
+
+- Pro demonstraci kódu není třeba žádné UI ani API. Vše stačí zavolat v main.py souboru a výsledek vypsat na standardní výstup.
+- Důkladný OOP návrh je pro hodnocení klíčový. Dbej na to, aby byl výsledný kód znovupoužitelný a snadno rozšiřitelný.
+- Použij statické typování (<https://docs.python.org/3/library/typing.html>).
+- Testy nejsou povinné, ale kód musí být napsán tak, aby na něj bylo možné testy snadno napsat.
+- Nezapomeň na ošetření vnějších vstupů.
+- Výsledné řešení ulož do veřejného GitHub repozitáře.
 
 ## Solution (cs)
 
-Vytvořil jsem Python balík s názvem `merio-order-service` ten představuje knihovnu, která se dá dále upravit na aplikaci npř. s REST či CLI rozhraním. Provedl jsem ukzáku pro oboje možnosti.
+Vytvořil jsem Python balík s názvem `merio-orders` a jednoduchým ukázkovým konzolovým rohraním (skript).  
 
-Orientoval jsem se podle zadaného datového soubory a identifikoval tyto
-doménové objekty, přesněji řečeno doménové entity, s následujícími atributy:
+### Doménová vrstva
 
-- `User(id, name, city, created)`
-- `Product(id, name, price, created)`
-- `Order(id, name, user, products, created)`
+ Orientoval jsem se podle daného datového souboru a identifikoval [agregáty](https://martinfowler.com/bliki/DDD_Aggregate.html) ( uložené v modulu `meiro.orders._domain.py`:
 
-Jde o entity, protože mají životní cyklus. Např. název nebo cena se mění, avšak jde stále o stějného uživatele respektive produkt.
-Tyto entioty navíc představují samostatné agregáty (<https://martinfowler.com/bliki/DDD_Aggregate.html>).
-Z předchozího vyplývá, že třída `Order`` neosahuje reference na objekty User a Product(s), ale jen jejich ID, viz
-> In general, you should avoid holding object references to other aggregates but rather reference other aggregates by id.
+- `User`: představuje uživatele aplikace.
+- `Product`: představuje produkt, který uživatel opřidává do objednávky.
+- `Order`:  představuje objednávku uživatele a obsahuje rederence na uživatele a proukty skrze jejich ID.
 
-Namísto vyhazování výjimek v doménové vrstvě, lze uvažovat o vracení chyby hodnotou nebo jako speciální typ `Result = Value | Error`.
+Jde o kořenové entity agregátu tzn., že mají životní cyklus. Například jméno uživatele, název nebo cena produktu se mohou měnit, avšak jde stále o stejného uživatele respektive produkt. Samotná třída `Order` neobsahuje reference na objekty `User` a `Product` (kolekce), ale jen jejich hodnoty jejich identifikátorů [^1].
 
-V případě produkční služby, je servisní třída většinou schována za REST API (např. pomocí balíku Flask) a nasazena
+Doménová vrstva neobsahuje žádné vstupně/výstupní funkce (metody) a lze ji proto snadno testovat pomoocí jednotkových testů. Spolu s doménovým modelme obsahuje také rozhraní (protokoly) pro perzistenci doménového modelu -- zde používám návrhový vzor [Repository](https://martinfowler.com/eaaCatalog/repository.html).
+
+### Servisní vrstva
+
+&hellip;
+
+### Testování
+
+&hellip;
+
+### Poznámky
+
+- Namísto vyhazování výjimek v doménové vrstvě, lze uvažovat o vracení chyby hodnotou nebo jako speciální typ `Result = Value | Error`.
+- V případě produkční služby, je servisní třída většinou schována za REST API (např. pomocí balíku Flask) a nasazena
 jako kontejner (např. Docker/Podman, Kubernetes).
 
 ## References
 
-- Evans E., (2003)
-- Vernon V., (2013)
+- Evans, E. (2004). *Domain-Driven Design: Tackling Complexity in the Heart of Software*. Addison-Wesley. ISBN: 9780321125217
+- Vernon, V. (2013). *Implementing Domain-Driven Design*. Upper Saddle River, Addison-Wesley. ISBN: 9780321834577
+- Percival H., Gregory B., (2021) . *Architecture Patterns with Python*, O'Reilly Media. ISBN: 9781492052203
 - <https://martinfowler.com/bliki/DomainDrivenDesign.html>
+- <https://ndjson.org/>, <https://jsonlines.org/>
+
+[^1]: *In general, you should avoid holding object references to other aggregates but rather reference other aggregates by ID.*
