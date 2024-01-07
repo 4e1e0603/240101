@@ -58,7 +58,7 @@ class Entity(ABC, Generic[Identifier]):
         return isinstance(other, type(self)) and self.id == other.id
 
     def __hash__(self) -> int:
-        return hash([type(self), self.id])
+        return hash((type(self), self.id))
 
     def __str__(self) -> str:
         return f"{type(self).__name__}(id={self.id})"

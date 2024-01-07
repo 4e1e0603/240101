@@ -98,6 +98,10 @@ class Order(Entity[OrderID]):
 
     Contains 1 User and 1..N products.
 
+    ..note: You can probably change products (insert, remove) or
+    assign the order to a different user. You cannot change `id` and
+    `created` attributes. Can the order have a 0 products?
+
     e.g.
     {
         "id": 21,
@@ -149,7 +153,7 @@ class Order(Entity[OrderID]):
 
     @property
     def products(self) -> Iterable[ProductID]:
-        return self._products
+        return tuple(self._products)
 
     def has_product(self, product_id: ProductID) -> bool:
         return product_id in self.products
@@ -168,6 +172,9 @@ class Order(Entity[OrderID]):
         )
 
     def insert_product(self, product_id: ProductID) -> Self:
+        return NotImplemented
+
+    def assign_to_user(user_id: UserID) -> Self:
         return NotImplemented
 
 

@@ -32,7 +32,6 @@ python -m pip install -e .
 python -m pip install -r requirements.txt
 ```
 
-
 We use `mypy` for type checking.
 
 ```powershell
@@ -51,9 +50,9 @@ ruff check --fix .
 The package contains simple command line interface
 
 ```powershell
-meiro-orders insert (path)
-meiro-orders search (users)
-meiro-orders search (orders)   
+meiro-orders --insert [file_path]
+meiro-orders (search users)
+meiro-orders (search orders)   
 ```
 
 ## Assignment (cs)
@@ -88,7 +87,7 @@ doménové objekty, přesněji řečeno doménové entity, s následujícími at
 - `Order(id, name, user, products, created)`
 
 Jde o entity, protože mají životní cyklus. Např. název nebo cena se mění, avšak jde stále o stějného uživatele respektive produkt.
-Tyto entioty navíc představují samostatné agregáty (https://martinfowler.com/bliki/DDD_Aggregate.html).
+Tyto entioty navíc představují samostatné agregáty (<https://martinfowler.com/bliki/DDD_Aggregate.html>).
 Z předchozího vyplývá, že třída `Order`` neosahuje reference na objekty User a Product(s), ale jen jejich ID, viz
 > In general, you should avoid holding object references to other aggregates but rather reference other aggregates by id.
 
