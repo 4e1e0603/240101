@@ -2,10 +2,14 @@
 
 (work-in-progress)
 
+<small>
+
 Music for code review:
 
 - [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Revolver Ocelot (2001)*](https://youtu.be/rEwb5mXxOls?si=vytNUV_jnK-t-Qql)
 - [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Countdown to Disaster (2001)*](https://youtu.be/z31HzRBW1qU?si=hqTfjFFpTxwpxg_-)
+
+</small>
 
 ## Installation
 
@@ -49,9 +53,16 @@ ruff format . && ruff check --fix .
 
 ### Tests
 
+Run all tests.
+
 ```shell
-pytest                          # Run all tests.
-pytest -m domain                # Run domain (unit) tests.
+pytest
+```
+
+Run domain (unit) tests.
+
+```shell
+pytest -m domain
 ```
 
 ### Versions
