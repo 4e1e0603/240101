@@ -19,6 +19,7 @@ from typing import TypeAlias, Iterable, Self, Generic, TypeVar, Protocol
 from datetime import datetime
 
 from ._shared import Entity, Timestamp
+# Review: Some developers prefer absolute paths e.g. `meiro.orders._shared`.
 
 
 class DomainError(Exception):
@@ -153,7 +154,7 @@ class Order(Entity[OrderID]):
 
     @property
     def products(self) -> Iterable[ProductID]:
-        return tuple(self._products)
+        return sorted(tuple(self._products))
 
     def has_product(self, product_id: ProductID) -> bool:
         return product_id in self.products

@@ -2,7 +2,10 @@
 
 **work-in-progress**
 
-Music for code review: [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack (2001)*](https://youtu.be/ZUd7myd0NK8?si=BM32dlPiFP9iO1-m)
+Music for code review: 
+
+- [*The Legend of Zelda: Breath of The Wild (2017)*](https://youtu.be/Hgd8aYjE0Bs?si=UeVbTcC4kLQvykVT)
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack (2001)*](https://youtu.be/ZUd7myd0NK8?si=BM32dlPiFP9iO1-m)
 
 ## Installation
 
@@ -49,10 +52,10 @@ ruff check --fix .
 
 The package contains simple command line interface
 
-```powershell
+```shell
 meiro-orders --insert [file_path]
-meiro-orders (search users) // NOT IMPLEMENTED
-meiro-orders (search orders) // NOT IMPLEMENTED   
+meiro-orders (search-users) // NOT IMPLEMENTED
+meiro-orders (search-orders) // NOT IMPLEMENTED   
 ```
 
 ---
