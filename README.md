@@ -10,26 +10,26 @@ Music for code review:
 ## Installation
 
 ```powershell
-git clone https://github.com/4e1e0603/230101.git
+git clone https://github.com/4e1e0603/230101.git meiro-orders
 ```
 
 ```powershell
-cd 230101
-```
-
-```powershell
-py -3.12 -m venv .venv
+py -3.12 -m venv .venv && .\.venv\Scripts\activate
 ````
 
 ```powershell
-.\.venv\Scripts\activate
+python -m pip install .\meiro-orders
+```
+
+## Development
+
+```powershell
+cd meiro-orders
 ```
 
 ```powershell
 python -m pip install -e .
 ```
-
-## Development
 
 ```powershell
 python -m pip install -r requirements.txt
@@ -44,8 +44,7 @@ mypy --show-error-codes .
 We use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
 
 ```powershell
-ruff format .
-ruff check --fix .
+ruff format . && ruff check --fix .
 ```
 
 ### Tests
