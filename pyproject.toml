@@ -69,3 +69,10 @@ exclude = [
     "node_modules",
     "venv",
 ]
+
+[tool.pytest.ini_options]
+markers = [
+    "domain: marks tests as domain (deselect with '-m \"not domain\"')",
+    "service",
+]
+

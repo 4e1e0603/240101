@@ -100,7 +100,10 @@ Doménová vrstva neobsahuje žádné vstupně/výstupní funkce (metody) a lze 
 
 ### Testování
 
-&hellip;
+```shell
+pytest                          # Run all tests.
+pytest -m domain                # Run domain (unit) tests.
+```
 
 ### Poznámky
 
