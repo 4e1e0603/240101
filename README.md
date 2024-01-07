@@ -2,7 +2,7 @@
 
 **work-in-progress**
 
-Music for code review: [Metal Gear Solid 2: Sons of Liberty Original Soundtrack (2001)*](https://youtu.be/ZUd7myd0NK8?si=BM32dlPiFP9iO1-m)
+Music for code review: [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack (2001)*](https://youtu.be/ZUd7myd0NK8?si=BM32dlPiFP9iO1-m)
 
 ## Installation
 
