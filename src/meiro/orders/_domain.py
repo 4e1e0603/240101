@@ -36,8 +36,6 @@ OrderID: TypeAlias = int
 class User(Entity[UserID]):
     """
     The custommer domain model.
-
-    e.g. `{"id": 0, "name": "User A", "city": "Prague"}`
     """
 
     def __init__(self, id: int, name: str, city: str) -> None:
@@ -49,10 +47,16 @@ class User(Entity[UserID]):
 
     @property
     def name(self) -> str:
+        """
+        :returns: a user's name.
+        """
         return self._name
 
     @property
     def city(self) -> str:
+        """
+        :returns: a user's city.
+        """
         return self._city
 
     # We can implement this with setters, but I prefer immutable instances.
@@ -60,13 +64,17 @@ class User(Entity[UserID]):
 
     def change_name(self, name: str) -> Self:
         """
-        Change the Users's name.
+        Change the users's name.
+
+        :param name: The new user's name.
         """
         return type(self)(id=self.id, name=name, city=self.city)
 
     def change_city(self, city: str) -> Self:
         """
-        Change the Users's city.
+        Change the users's city.
+
+        :param name: The new user's city.
         """
         return type(self)(id=self.id, name=self.name, city=city)
 
@@ -75,9 +83,8 @@ class Product(Entity[ProductID]):
     """
     The product domain model.
 
-    e.g {"id": 2, "name": "Product C", "price": 140}
-
-    The price should be of some special `Money` or `Decimal` type. Never ever use floats!
+    The price should be of some special `Money` or `Decimal` type.
+    Never ever use floats!
     """
 
     def __init__(
@@ -91,6 +98,20 @@ class Product(Entity[ProductID]):
         super().__init__(id=id)
         self._name = name
         self._price = price
+
+    @property
+    def name(self) -> str:
+        """
+        :returns: a product's name.
+        """
+        return self._name
+
+    @property
+    def price(self) -> str:
+        """
+        :returns: a product's price.
+        """
+        return self._city
 
 
 class Order(Entity[OrderID]):

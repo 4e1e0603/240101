@@ -2,92 +2,6 @@
 
 (work-in-progress)
 
-<small>
-
-Music for code review:
-
-- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Revolver Ocelot (2001)*](https://youtu.be/rEwb5mXxOls?si=vytNUV_jnK-t-Qql)
-- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Countdown to Disaster (2001)*](https://youtu.be/z31HzRBW1qU?si=hqTfjFFpTxwpxg_-)
-
-</small>
-
-## Installation
-
-```powershell
-git clone https://github.com/4e1e0603/230101.git meiro-orders
-```
-
-```powershell
-py -3.12 -m venv .venv && .\.venv\Scripts\activate
-````
-
-```powershell
-python -m pip install .\meiro-orders
-```
-
-## Development
-
-```powershell
-cd meiro-orders
-```
-
-```powershell
-python -m pip install -e .
-```
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-We use [`mypy`](https://mypy-lang.org/) for type checking.
-
-```powershell
-mypy --show-error-codes .
-```
-
-We use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
-
-```powershell
-ruff format . && ruff check --fix .
-```
-
-### Tests
-
-Run all tests.
-
-```shell
-pytest
-```
-
-Run domain (unit) tests.
-
-```shell
-pytest -m domain
-```
-
-### Versions
-
-We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
-  
-## Usage
-
-Database is created when the script is executed from the package data file, see [src/meiro/orders/schema.sql](schema.sql). You can also creata the schma by hand with `sqlite3` binary.
-
-```shell
-./sqlite3 orders.sqlite
-sqlite> .read schema.sql
-```
-
-The package contains simple command line interface
-
-```shell
-meiro-orders --import [file_path]
-meiro-orders (search-users) // NOT IMPLEMENTED
-meiro-orders (search-orders) // NOT IMPLEMENTED   
-```
-
----
-
 ## Assignment (cs)
 
 - Vytvoř třídu `OrdersService`, která bude poskytovat následující rozhraní:
@@ -112,7 +26,7 @@ Vytvořil jsem Python balík s názvem `merio-orders` a jednoduchým ukázkovým
 
 ### Doménová vrstva
 
- Orientoval jsem se podle daného datového souboru a identifikoval [agregáty](https://martinfowler.com/bliki/DDD_Aggregate.html) ( uložené v modulu `meiro.orders._domain.py`:
+Implementujeme tyto [agregáty](https://martinfowler.com/bliki/DDD_Aggregate.html) uložené v modulu `meiro.orders._domain.py`:
 
 - `User`: představuje uživatele aplikace.
 - `Product`: představuje produkt, který uživatel opřidává do objednávky.
@@ -126,15 +40,13 @@ Doménová vrstva neobsahuje žádné vstupně/výstupní funkce (metody) a lze 
 
 &hellip;
 
-### Verzování
-
 ### Poznámky
 
 - Namísto vyhazování výjimek v doménové vrstvě, lze uvažovat o vracení chyby hodnotou nebo jako speciální typ `Result = Value | Error`.
 - V případě produkční služby, je servisní třída většinou schována za REST API (např. pomocí balíku Flask) a nasazena
 jako kontejner (např. Docker/Podman, Kubernetes).
 
-## References
+### References
 
 - Evans, E. (2004). *Domain-Driven Design: Tackling Complexity in the Heart of Software*. Addison-Wesley. ISBN: 9780321125217
 - Vernon, V. (2013). *Implementing Domain-Driven Design*. Upper Saddle River, Addison-Wesley. ISBN: 9780321834577
@@ -143,3 +55,85 @@ jako kontejner (např. Docker/Podman, Kubernetes).
 - <https://ndjson.org/>, <https://jsonlines.org/>
 
 [^1]: *In general, you should avoid holding object references to other aggregates but rather reference other aggregates by ID.*
+
+<small>
+
+Music for code review:
+
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Revolver Ocelot (2001)*](https://youtu.be/rEwb5mXxOls?si=vytNUV_jnK-t-Qql)
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Twilight Sniping (2001)*](https://youtu.be/iroXKdSqSPo?si=ZS2LRkEI3accxks5)
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Countdown to Disaster (2001)*](https://youtu.be/z31HzRBW1qU?si=hqTfjFFpTxwpxg_-)
+
+</small>
+
+## Installation
+
+-
+  ```powershell
+  git clone https://github.com/4e1e0603/230101.git meiro-orders
+  ```
+-
+  ```powershell
+  py -3.12 -m venv .venv && .\.venv\Scripts\activate
+  ````
+- 
+  ```powershell
+  python -m pip install .\meiro-orders
+  ```
+
+## Development
+- 
+  ```powershell
+  cd meiro-orders
+  ```
+-
+  ```powershell
+  python -m pip install -e .
+  ```
+- 
+  ```powershell
+  python -m pip install -r requirements.txt
+  ```
+
+- We use [`mypy`](https://mypy-lang.org/) for type checking.
+
+  ```powershell
+  mypy --show-error-codes .
+  ```
+
+- We use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
+
+  ```powershell
+  ruff format . && ruff check --fix .
+  ```
+
+- Run all tests.
+
+  ```shell
+  pytest
+  ```
+
+- Run domain (unit) tests.
+
+  ```shell
+  pytest -m domain
+  ```
+
+- We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
+  
+## Usage
+
+Database is created when the script is executed from the package data file, see [src/meiro/orders/schema.sql](schema.sql). You can also creata the schma by hand with `sqlite3` binary.
+
+```shell
+./sqlite3 orders.sqlite
+sqlite> .read schema.sql
+```
+
+The package contains simple command line interface
+
+```shell
+meiro-orders --import [file_path]
+meiro-orders (search-users) // NOT IMPLEMENTED
+meiro-orders (search-orders) // NOT IMPLEMENTED   
+```
