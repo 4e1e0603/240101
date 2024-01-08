@@ -3,7 +3,6 @@ The order service module.
 """
 
 __all__ = [
-    "main",
     "OrderService",
     "Order",
     "Product",
@@ -13,9 +12,9 @@ __all__ = [
     "UserReposiotry",
 ]
 
-from ._service import main as main, OrderService as OrderService
 from ._domain import User as User, Order as Order, Product as Product
-from ._schema import (
+from ._service import OrderService as OrderService
+from ._storage import (
     UserRepository as UserRepository,
     ProductRepository as ProductRepository,
     OrderRepository as OrderRepository,

@@ -34,8 +34,11 @@ classifiers = [
 where = ["src"]
 namespaces = true
 
+[tool.setuptools.package-data]
+orders = ["*.sql"]
+
 [project.scripts]
-meiro-orders = "meiro.orders.__init__:main"
+meiro-orders = "meiro.orders.__main__:main"
 
 [tool.setuptools.dynamic]
 readme = {file = ["README.md"]}

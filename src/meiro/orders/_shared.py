@@ -65,14 +65,6 @@ class Entity(ABC, Generic[Identifier]):
 
     __repr__ = __str__
 
-    def to_json(self):
-        return NotImplemented
-        # The transfer layer (data transfer object) related function.
-        # Can also be a standalone :class:`JsonEncoder`.
-        # Shoud it be abstract method?
-
-
-class JsonError(ValueError):
-    """
-    Use with :mod:`json` module.
-    """
+    # def to_json(self): return NotImplemented
+    # The transfer layer (data transfer object) related function.
+    # Use a standalone :class:`JsonEncoder`.

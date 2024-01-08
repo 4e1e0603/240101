@@ -1,29 +1,41 @@
 import argparse
 import sys
 from pathlib import Path
-from datetime import datetime
+
 
 from meiro.orders import (
     UserRepository,
     ProductRepository,
     OrderRepository,
-    User,
-    Order,
-    Product,
     OrderService,
 )
+
+from ._service import JsonError
 
 
 def main():
     """
     The main function for command line showcase.
 
-    # print("Could not parse JSON object: {line}", file=sys.stderr)
+
     # ^^^ Better to use logger on module level for better control.
     """
     print("--[SHOWCASE]--", file=sys.stderr)
 
-    # engine = create_schema()
+    import sqlite3 as db
+
+    schema_path = Path(Path(__file__).resolve().parents[1], "orders", "schema.sql")
+    with open(schema_path, encoding="utf8") as schema:
+        statements = schema.read()
+        statements = [x.strip() for x in statements.split("----")]
+
+    with db.connect("orders.db") as connection:
+        cursor = connection.cursor()
+        for statement in statements:
+            cursor.execute(statement)
+        cursor.execute("insert into users (id, name, city) values (1, 'name', 'city');")
+        connection.commit()
+        # connection.close()
 
     parser = argparse.ArgumentParser("meiro-orders", "The orders service")
     parser.add_argument("--insert")
@@ -45,29 +57,7 @@ def main():
         except FileNotFoundError:
             print(f"File '{path}' could not be found.", file=sys.stderr)
             sys.exit(1)
+        except JsonError:
+            print("Could not parse line to JSON object", file=sys.stderr)
 
-    # Users showcase
-    # ---------------------------------------------------------------------- #
-    user1 = User(id=1, name="A", city="A")
-    user2 = User(id=2, name="A", city="A")
-
-    print(user1 == user2)  # expected == False
-
-    # Products showcase
-    # ---------------------------------------------------------------------- #
-    product1 = Product(id=1, name="A", price=1)
-    product2 = Product(id=2, name="A", price=1)
-
-    print(product1 == product2)  # expected == False
-
-    product3 = Product(id=1, name="B", price=2)  #
-    print(product1 == product3)  # expected == True (same ID)
-
-    # Orders showcase
-    # ---------------------------------------------------------------------- #
-    order1 = Order(id=1, user=user1.id, products=[product1.id], created=datetime.now())
-    order2 = Order(
-        id=1, user=user1.id, products=[product1.id, product2.id], created=datetime.now()
-    )
-
-    print(order1 == order2)
+    # print(order1 == order2)

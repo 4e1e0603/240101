@@ -71,10 +71,17 @@ We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to m
   
 ## Usage
 
+Database is created when the script is executed from the package data file, see [src/meiro/orders/schema.sql](schema.sql). You can also creata the schma by hand with `sqlite3` binary.
+
+```shell
+./sqlite3 orders.sqlite
+sqlite> .read schema.sql
+```
+
 The package contains simple command line interface
 
 ```shell
-meiro-orders --insert [file_path]
+meiro-orders --import [file_path]
 meiro-orders (search-users) // NOT IMPLEMENTED
 meiro-orders (search-orders) // NOT IMPLEMENTED   
 ```
