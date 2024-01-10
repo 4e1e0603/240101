@@ -1,5 +1,7 @@
 # meiro-orders
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/16143c71458f4ac787b1a28f491b3d19)](https://app.codacy.com/gh/4e1e0603/230101?utm_source=github.com&utm_medium=referral&utm_content=4e1e0603/230101&utm_campaign=Badge_Grade)
+
 (work-in-progress)
 
 ## Assignment (cs)
