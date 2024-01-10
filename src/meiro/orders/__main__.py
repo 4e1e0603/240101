@@ -4,6 +4,7 @@ from pathlib import Path
 import sqlite3 as db
 
 from meiro.orders import (
+    User,
     UserRepository,
     ProductRepository,
     OrderRepository,
@@ -21,7 +22,7 @@ def main():
     print("--[SHOWCASE]--", file=sys.stderr)
 
     schema_path = Path(Path(__file__).resolve().parents[1], "orders", "schema.sql")
-    # Read, split, and clean statements.
+    # Read, split, and clean statements (what about connection.executescript(sql_script) :D).
     with open(schema_path, encoding="utf8") as schema:
         statements = [
             x.strip() for x in schema.read().split("----") if not x.startswith("--")
@@ -29,6 +30,8 @@ def main():
 
     # Create database schema from parsed statements.
     with db.connect("orders.db") as connection:
+        ur = UserRepository(connection)
+        ur.save(User(99, "x", "y"))
         cursor = connection.cursor()
         for statement in statements:
             cursor.execute(statement)

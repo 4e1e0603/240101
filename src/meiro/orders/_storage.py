@@ -1,8 +1,12 @@
 """
-This module contains database related code.
+This module contains database related code such as implementation 
+of repositories for each aggregate.
 """
 
+import sys
+
 from ._domain import User, Order, Product, AbstractRepository
+
 
 __all__ = [
     "UserRepository",
@@ -12,33 +16,48 @@ __all__ = [
 
 
 class UserRepository(AbstractRepository[User]):
+    """
+    The repository for users.
+    """
+
     def __init__(self, connection) -> None:
         self.connection = connection
 
-    def save(self, entity: User) -> None:
-        return NotImplemented
+    def save(self, aggregate: User) -> None:
+        statement = "insert into users (id, name, city) values (?, ?, ?);"
+        with self.connection as cursor:
+            cursor.execute(statement, (aggregate.id, aggregate.name, aggregate.city))
+        print(f"inserted {aggregate}", file=sys.stderr)  # DEBUG (remove)
 
-    def find(self, entity: User) -> User | None:
+    def find(self, aggregate: User) -> User | None:
         return NotImplemented
 
 
 class OrderRepository(AbstractRepository[Order]):
+    """
+    The repository for orders.
+    """
+
     def __init__(self, connection) -> None:
         self.connection = connection
 
-    def save(self, entity: Order) -> None:
+    def save(self, aggregate: Order) -> None:
         return NotImplemented
 
-    def find(self, entity: Order) -> Order | None:
+    def find(self, aggregate: Order) -> Order | None:
         return NotImplemented
 
 
 class ProductRepository(AbstractRepository[Product]):
+    """
+    The repository fo products.
+    """
+
     def __init__(self, connection) -> None:
         self.connection = connection
 
-    def save(self, entity: Product) -> None:
+    def save(self, aggregate: Product) -> None:
         return NotImplemented
 
-    def find(self, entity: Product) -> Product | None:
+    def find(self, aggregate: Product) -> Product | None:
         return NotImplemented

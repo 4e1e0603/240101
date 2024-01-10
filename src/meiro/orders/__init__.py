@@ -9,7 +9,7 @@ __all__ = [
     "User",
     "OrderRepository",
     "ProductRepository",
-    "UserReposiotry",
+    "UserRepository",
 ]
 
 from ._domain import User as User, Order as Order, Product as Product

@@ -38,10 +38,10 @@ class User(Entity[UserID]):
     The custommer domain model.
     """
 
-    def __init__(self, id: int, name: str, city: str) -> None:
-        if id < 0:
+    def __init__(self, identifier: int, name: str, city: str) -> None:
+        if identifier < 0:
             raise ValueError("An identifier cannot be a negative number.")
-        super().__init__(id=id)
+        super().__init__(identifier=identifier)
         self._name = name
         self._city = city
 
@@ -89,13 +89,13 @@ class Product(Entity[ProductID]):
 
     def __init__(
         self,
-        id: ProductID,
+        identifier: ProductID,
         name: str,
         price: int,
     ):
-        if id < 0:
+        if identifier < 0:
             raise ValueError("An identifier cannot be a negative number.")
-        super().__init__(id=id)
+        super().__init__(identifier=identifier)
         self._name = name
         self._price = price
 
@@ -135,17 +135,17 @@ class Order(Entity[OrderID]):
 
     def __init__(
         self,
-        id: OrderID,
+        identifier: OrderID,
         user: UserID,
         created: datetime | Timestamp,
         products: Iterable[ProductID],
     ) -> None:
-        if id < 0:
+        if identifier < 0:
             raise ValueError("Identifier cannot be a negative number")
         if len(products) == 0:
             raise ValueError("Products cannot be and empty collection")
 
-        super().__init__(id=id)
+        super().__init__(identifier=identifier)
         self._user = user
         self._created = (
             datetime.timestamp(created) if isinstance(created, datetime) else created
