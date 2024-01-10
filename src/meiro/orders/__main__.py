@@ -1,7 +1,7 @@
 import argparse
 import sys
 from pathlib import Path
-
+import sqlite3 as db
 
 from meiro.orders import (
     UserRepository,
@@ -15,41 +15,40 @@ from ._service import JsonError
 
 def main():
     """
-    The main function for command line showcase.
-
-
-    # ^^^ Better to use logger on module level for better control.
+    The main function to demonstrate service functionality.
     """
+    # Better to use logger on module level for better control.
     print("--[SHOWCASE]--", file=sys.stderr)
 
-    import sqlite3 as db
-
     schema_path = Path(Path(__file__).resolve().parents[1], "orders", "schema.sql")
+    # Read, split, and clean statements.
     with open(schema_path, encoding="utf8") as schema:
-        statements = schema.read()
-        statements = [x.strip() for x in statements.split("----")]
+        statements = [
+            x.strip() for x in schema.read().split("----") if not x.startswith("--")
+        ]
 
+    # Create database schema from parsed statements.
     with db.connect("orders.db") as connection:
         cursor = connection.cursor()
         for statement in statements:
             cursor.execute(statement)
-        cursor.execute("insert into users (id, name, city) values (1, 'name', 'city');")
+        cursor.execute("insert into users (id, name, city) values (0, 'name', 'city');")
         connection.commit()
-        # connection.close()
 
+    # Define simple CLI interface.
     parser = argparse.ArgumentParser("meiro-orders", "The orders service")
     parser.add_argument("--insert")
 
     options = parser.parse_args()
 
+    # Configure the application service.
     service = OrderService(
         user_repository=UserRepository,
         order_repository=OrderRepository,
         product_repository=ProductRepository,
     )
 
-    # TODO Batch insert showcase
-    # ---------------------------------------------------------------------- #
+    # Showcase: the batch insert of data + use cases.
     if options.insert is not None:
         try:
             path = Path(options.insert.strip())

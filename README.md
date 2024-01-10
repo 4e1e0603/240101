@@ -1,5 +1,8 @@
 # meiro-orders
 
+[![build](https://github.com/4e1e0603/230101/actions/workflows/main.yml/badge.svg)](https://github.com/4e1e0603/230101/actions/workflows/main.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a70ed10bc4b949f7a236e67d1ff0287f)](https://app.codacy.com/gh/4e1e0603/230101/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 (work-in-progress)
 
 ## Assignment (cs)
@@ -66,31 +69,44 @@ Music for code review:
 
 </small>
 
+
+
 ## Installation
 
 -
+
   ```powershell
   git clone https://github.com/4e1e0603/230101.git meiro-orders
   ```
+
 -
+
   ```powershell
   py -3.12 -m venv .venv && .\.venv\Scripts\activate
   ````
-- 
+
+-
+
   ```powershell
   python -m pip install .\meiro-orders
   ```
 
 ## Development
-- 
+
+-
+
   ```powershell
   cd meiro-orders
   ```
+
 -
+
   ```powershell
   python -m pip install -e .
   ```
-- 
+
+-
+
   ```powershell
   python -m pip install -r requirements.txt
   ```
@@ -108,7 +124,7 @@ Music for code review:
   ```
 
 - Run all tests.
-
+s
   ```shell
   pytest
   ```
