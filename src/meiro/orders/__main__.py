@@ -2,16 +2,19 @@ import argparse
 import sys
 from pathlib import Path
 import sqlite3 as db
+import json
+
+
+import logging
 
 from meiro.orders import (
-    User,
     UserRepository,
     ProductRepository,
     OrderRepository,
     OrderService,
 )
 
-from ._service import JsonError
+DATABASE_FILE = "orders.sqlite"
 
 
 def main():
@@ -19,47 +22,70 @@ def main():
     The main function to demonstrate service functionality.
     """
     # Better to use logger on module level for better control.
-    print("--[SHOWCASE]--", file=sys.stderr)
+    logging.basicConfig(level=logging.INFO)
 
-    schema_path = Path(Path(__file__).resolve().parents[1], "orders", "schema.sql")
-    # Read, split, and clean statements (what about connection.executescript(sql_script) :D).
-    with open(schema_path, encoding="utf8") as schema:
-        statements = [
-            x.strip() for x in schema.read().split("----") if not x.startswith("--")
-        ]
-
-    # Create database schema from parsed statements.
-    with db.connect("orders.db") as connection:
-        ur = UserRepository(connection)
-        ur.save(User(99, "x", "y"))
-        cursor = connection.cursor()
-        for statement in statements:
-            cursor.execute(statement)
-        cursor.execute("insert into users (id, name, city) values (0, 'name', 'city');")
-        connection.commit()
-
-    # Define simple CLI interface.
+    # -----------------------------------------------------------------------
+    # Define a simple CLI interface.
+    # -----------------------------------------------------------------------
     parser = argparse.ArgumentParser("meiro-orders", "The orders service")
-    parser.add_argument("--insert")
-
+    parser.add_argument("--data", required=True)
     options = parser.parse_args()
 
-    # Configure the application service.
-    service = OrderService(
-        user_repository=UserRepository,
-        order_repository=OrderRepository,
-        product_repository=ProductRepository,
-    )
+    # -----------------------------------------------------------------------
+    # Create database schema form the scripts.
+    # -----------------------------------------------------------------------
+    with db.connect(DATABASE_FILE) as connection:
+        schema_path = Path(Path(__file__).resolve().parents[1], "orders", "schema.sql")
+        # Crate a new tables.
+        with open(schema_path, encoding="utf8") as schema:
+            statements = schema.read()
+        cursor = connection.cursor()
+        cursor.executescript(statements)
+        # Delete existing records.
+        delete_tables = """
+            delete from order_lines;
+            delete from products;
+            delete from orders;
+            delete from users;
+        """
+        cursor.executescript(delete_tables)
+        connection.commit()
 
     # Showcase: the batch insert of data + use cases.
-    if options.insert is not None:
-        try:
-            path = Path(options.insert.strip())
-            service.batch_insert(file_path=path)
-        except FileNotFoundError:
-            print(f"File '{path}' could not be found.", file=sys.stderr)
-            sys.exit(1)
-        except JsonError:
-            print("Could not parse line to JSON object", file=sys.stderr)
+    # -----------------------------------------------------------------------
+    # Configure the application service.
+    # -----------------------------------------------------------------------
+    connection = db.connect(DATABASE_FILE)
 
-    # print(order1 == order2)
+    service = OrderService(
+        user_repository=UserRepository(connection),
+        order_repository=OrderRepository(connection),
+        product_repository=ProductRepository(connection),
+    )
+    path = Path(options.data.strip())
+    with open(path, encoding="utf8") as file:
+        lines = file.readlines()
+
+    error = (0, None)  # namedtuple?
+    try:
+        # We don't use comprehension to catch error for specific line.
+        records = []
+        for index, line in enumerate(lines):
+            records.append(json.loads(line))
+            print(f"Processed record {index + 1}/{len(lines)}", file=sys.stderr)
+            sys.stderr.write("\033[F")
+
+        service.batch_insert(records=records)
+    except FileNotFoundError:
+        error = (1, f"Could not find {path}")
+    except ValueError:  # JsonError
+        error = (2, f"Could not parse '{line}'")
+    except KeyboardInterrupt:
+        error = (3, "Interrupted by user")
+
+    if error[0] == 0:
+        print("--SUCCESS--")
+    else:
+        print(f"FAILURE {error[1]}", file=sys.stderr)
+
+    sys.exit(error[0])

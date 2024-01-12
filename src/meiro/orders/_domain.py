@@ -10,15 +10,12 @@ __all__ = [
     "Order",
     "Product",
     "DomainError",
-    "Repository",
-    "AbstractRepository",
 ]
 
-from abc import ABC, abstractmethod
-from typing import TypeAlias, Iterable, Self, Generic, TypeVar, Protocol
+from typing import TypeAlias, Iterable, Self
 from datetime import datetime
 
-from ._shared import Entity, Timestamp
+from ._shared import Entity, Timestamp, Repository
 # Review: Some developers prefer absolute paths e.g. `meiro.orders._shared`.
 
 
@@ -68,7 +65,7 @@ class User(Entity[UserID]):
 
         :param name: The new user's name.
         """
-        return type(self)(id=self.id, name=name, city=self.city)
+        return type(self)(id=self.identifier, name=name, city=self.city)
 
     def change_city(self, city: str) -> Self:
         """
@@ -76,7 +73,7 @@ class User(Entity[UserID]):
 
         :param name: The new user's city.
         """
-        return type(self)(id=self.id, name=self.name, city=city)
+        return type(self)(id=self.identifier, name=self.name, city=city)
 
 
 class Product(Entity[ProductID]):
@@ -111,7 +108,7 @@ class Product(Entity[ProductID]):
         """
         :returns: a product's price.
         """
-        return self._city
+        return self._price
 
 
 class Order(Entity[OrderID]):
@@ -200,47 +197,16 @@ class Order(Entity[OrderID]):
         return NotImplemented
 
 
-EntityType = TypeVar("EntityType", bound=Entity)
-
-
-class Repository(Generic[EntityType], Protocol):
+class UserRepository(Repository[User]):
     """
-    Save and find entitiy in the repository.
+    The repository protocol (interface) for users.
     """
 
-    def save(self, entity) -> None:
-        """
-        Save the entity to the storage.
+    def save(self, aggregate: User) -> None:
+        ...
 
-        :param entity: The entity to save.
-        """
+    def find(self, aggregate: User) -> User | None:
+        ...
 
-    def find(self, entity) -> EntityType | None:
-        """
-        Find the entity in the storage.
-
-        :param entity: The entity to find.
-        :returns: The found entity or `None`.
-        """
-
-
-class AbstractRepository(ABC, Generic[EntityType]):
-    def __init__(self, connection) -> None:
-        self.connection = connection
-
-    @abstractmethod
-    def save(entity) -> None:
-        """
-        Save the entity to the storage.
-
-        :param entity: The entity to save.
-        """
-
-    @abstractmethod
-    def find(entity) -> EntityType | None:
-        """
-        Find the entity in the storage.
-
-        :param entity: The entity to find.
-        :returns: The found entity or `None`.
-        """
+    def exists(self, aggregate: User) -> bool:
+        ...

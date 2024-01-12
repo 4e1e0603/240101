@@ -50,6 +50,7 @@ extend-include = ["*.ipynb"]
 target-version = "py312"
 
 exclude = [
+    "docs",
     ".bzr",
     ".direnv",
     ".eggs",

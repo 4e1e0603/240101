@@ -1,11 +1,12 @@
 """
 This module contains database related code such as implementation 
-of repositories for each aggregate.
+of repositories for each aggregate. This is a infrastructure persistence layer.
 """
 
 import sys
 
-from ._domain import User, Order, Product, AbstractRepository
+from ._domain import User, Order, Product
+from ._shared import AbstractRepository
 
 
 __all__ = [
@@ -26,11 +27,19 @@ class UserRepository(AbstractRepository[User]):
     def save(self, aggregate: User) -> None:
         statement = "insert into users (id, name, city) values (?, ?, ?);"
         with self.connection as cursor:
-            cursor.execute(statement, (aggregate.id, aggregate.name, aggregate.city))
+            cursor.execute(
+                statement, (aggregate.identifier, aggregate.name, aggregate.city)
+            )
         print(f"inserted {aggregate}", file=sys.stderr)  # DEBUG (remove)
 
     def find(self, aggregate: User) -> User | None:
         return NotImplemented
+
+    def exists(self, aggregate: User) -> bool:
+        statement = "select id from users where users.id = ?;"
+        with self.connection as cursor:
+            result = cursor.execute(statement, (aggregate.identifier,))
+        return result.fetchone() is not None
 
 
 class OrderRepository(AbstractRepository[Order]):
@@ -47,6 +56,12 @@ class OrderRepository(AbstractRepository[Order]):
     def find(self, aggregate: Order) -> Order | None:
         return NotImplemented
 
+    def exists(self, aggregate: User) -> bool:
+        statement = "select id from orders where users.id = ?;"
+        with self.connection as cursor:
+            result = cursor.execute(statement, (aggregate.identifier,))
+        return result.fetchone() is not None
+
 
 class ProductRepository(AbstractRepository[Product]):
     """
@@ -61,3 +76,9 @@ class ProductRepository(AbstractRepository[Product]):
 
     def find(self, aggregate: Product) -> Product | None:
         return NotImplemented
+
+    def exists(self, aggregate: Product) -> bool:
+        statement = "select id from products where products.id = ?;"
+        with self.connection as cursor:
+            result = cursor.execute(statement, (aggregate.identifier,))
+        return result.fetchone() is not None

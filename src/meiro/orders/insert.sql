@@ -1,9 +1,3 @@
--- delete from order_lines;
--- delete from products;
--- delete from orders;
--- delete from users;
-
-
 insert into users (id, name, city) values (1, "user1", "city1");
 insert into users (id, name, city) values (2, "user2", "city1");
 insert into users (id, name, city) values (3, "user3", "city2");
