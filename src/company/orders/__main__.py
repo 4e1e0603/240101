@@ -7,7 +7,7 @@ import json
 
 import logging
 
-from meiro.orders import (
+from company.orders import (
     UserRepository,
     ProductRepository,
     OrderRepository,

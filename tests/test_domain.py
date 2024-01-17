@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from meiro.orders._domain import Order, Product, User
+from company.orders._domain import Order, Product, User
 
 
 @pytest.mark.domain

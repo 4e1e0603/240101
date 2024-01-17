@@ -1,9 +1,10 @@
-# meiro-orders
+# company-orders
 
 [![build](https://github.com/4e1e0603/230101/actions/workflows/main.yml/badge.svg)](https://github.com/4e1e0603/230101/actions/workflows/main.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a70ed10bc4b949f7a236e67d1ff0287f)](https://app.codacy.com/gh/4e1e0603/230101/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 (work-in-progress)
+me
 
 ## Assignment (cs)
 
@@ -29,7 +30,7 @@ Vytvořil jsem Python balík s názvem `merio-orders` a jednoduchým ukázkovým
 
 ### Doménová vrstva
 
-Implementujeme tyto [agregáty](https://martinfowler.com/bliki/DDD_Aggregate.html) uložené v modulu `meiro.orders._domain.py`:
+Implementujeme tyto [agregáty](https://martinfowler.com/bliki/DDD_Aggregate.html) uložené v modulu `company.orders._domain.py`:
 
 - `User`: představuje uživatele aplikace.
 - `Product`: představuje produkt, který uživatel opřidává do objednávky.
@@ -69,14 +70,12 @@ Music for code review:
 
 </small>
 
-
-
 ## Installation
 
 -
 
   ```powershell
-  git clone https://github.com/4e1e0603/230101.git meiro-orders
+  git clone https://github.com/4e1e0603/230101.git company-orders
   ```
 
 -
@@ -88,7 +87,7 @@ Music for code review:
 -
 
   ```powershell
-  python -m pip install .\meiro-orders
+  python -m pip install .\company-orders
   ```
 
 ## Development
@@ -96,7 +95,7 @@ Music for code review:
 -
 
   ```powershell
-  cd meiro-orders
+  cd company-orders
   ```
 
 -
@@ -125,8 +124,9 @@ Music for code review:
 
 - Run all tests.
 s
+
   ```shell
-  pytest
+  pytest  
   ```
 
 - Run domain (unit) tests.
@@ -139,7 +139,7 @@ s
   
 ## Usage
 
-Database is created when the script is executed from the package data file, see [src/meiro/orders/schema.sql](schema.sql). You can also creata the schma by hand with `sqlite3` binary.
+Database is created when the script is executed from the package data file, see [src/company/orders/schema.sql](schema.sql). You can also creata the schma by hand with `sqlite3` binary.
 
 ```shell
 ./sqlite3 orders.sqlite
@@ -149,7 +149,7 @@ sqlite> .read schema.sql
 The package contains simple command line interface
 
 ```shell
-meiro-orders --import [file_path]
-meiro-orders (search-users) // NOT IMPLEMENTED
-meiro-orders (search-orders) // NOT IMPLEMENTED   
+company-orders --import [file_path]
+company-orders (search-users) // NOT IMPLEMENTED
+company-orders (search-orders) // NOT IMPLEMENTED   
 ```
