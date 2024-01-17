@@ -73,8 +73,7 @@ class OrderService:
         """
         # NOTE This should probably be a transactional with rollaback for users and products tables.
         # => Use unit of work pattern in production.
-        orders: list[Order] = []
-
+        # Parse entities from raw data.
         for record in records:
             # Extract and save a new user.
             user = User(
@@ -106,7 +105,9 @@ class OrderService:
                 user=user.identifier,
                 products=[p.identifier for p in products],
             )
-            print(order)
+            if self._order_repository.exists(order):
+                raise Exception("Conflict")  # TODO Improve exception class and message.
+            self._order_repository.save(order)
 
         # Store the orders in database.
         # Ensure that attributes for products and users does not change over dataset.

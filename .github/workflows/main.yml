@@ -33,7 +33,7 @@ jobs:
 
             - name: Check package installation
               run: |
-                   python -c "import meiro.orders"
+                   python -c "import company.orders"
 
             - name: Check errors with 'ruff'
               run: |

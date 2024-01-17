@@ -11,8 +11,8 @@ from ._shared import AbstractRepository
 
 __all__ = [
     "UserRepository",
-    "OrderRepository",
     "ProductRepository",
+    "OrderRepository",
 ]
 
 
@@ -42,27 +42,6 @@ class UserRepository(AbstractRepository[User]):
         return result.fetchone() is not None
 
 
-class OrderRepository(AbstractRepository[Order]):
-    """
-    The repository for orders.
-    """
-
-    def __init__(self, connection) -> None:
-        self.connection = connection
-
-    def save(self, aggregate: Order) -> None:
-        return NotImplemented
-
-    def find(self, aggregate: Order) -> Order | None:
-        return NotImplemented
-
-    def exists(self, aggregate: User) -> bool:
-        statement = "select id from orders where users.id = ?;"
-        with self.connection as cursor:
-            result = cursor.execute(statement, (aggregate.identifier,))
-        return result.fetchone() is not None
-
-
 class ProductRepository(AbstractRepository[Product]):
     """
     The repository fo products.
@@ -79,6 +58,27 @@ class ProductRepository(AbstractRepository[Product]):
 
     def exists(self, aggregate: Product) -> bool:
         statement = "select id from products where products.id = ?;"
+        with self.connection as cursor:
+            result = cursor.execute(statement, (aggregate.identifier,))
+        return result.fetchone() is not None
+
+
+class OrderRepository(AbstractRepository[Order]):
+    """
+    The repository for orders.
+    """
+
+    def __init__(self, connection) -> None:
+        self.connection = connection
+
+    def save(self, aggregate: Order) -> None:
+        return NotImplemented
+
+    def find(self, aggregate: Order) -> Order | None:
+        return NotImplemented
+
+    def exists(self, aggregate: User) -> bool:
+        statement = "select id from orders where users.id = ?;"
         with self.connection as cursor:
             result = cursor.execute(statement, (aggregate.identifier,))
         return result.fetchone() is not None
