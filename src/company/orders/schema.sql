@@ -2,7 +2,7 @@
 -- A database schema for ordering service.
 --
 
-CREATE TABLE if NOT EXISTS version (
+CREATE TABLE IF NOT EXISTS version (
     major INT,
     minor INT,
     patch INT,
@@ -18,7 +18,7 @@ CREATE TABLE if NOT EXISTS version (
 );
 
 -- Table comments are not suported so we add our comments to custom table.
-CREATE TABLE if NOT EXISTS table_comments (
+CREATE TABLE IF NOT EXISTS table_comments (
     table_name text,
     table_comment text,
     CONSTRAINT pk_table_comments PRIMARY key (table_name, table_comment)
@@ -29,24 +29,24 @@ CREATE TABLE if NOT EXISTS table_comments (
 -- insert into table_comments (table_name, table_comment) values ("orders", "The orders purchased by our users.")
 -- insert into table_comments (table_name, table_comment) values ("order_lines", "The order line connects a product with order.")
 
-CREATE TABLE if NOT EXISTS users (
+CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY key NOT NULL,
     name text NOT NULL CHECK(name <> ''),
     city text NOT NULL CHECK(name <> '')
 );
-CREATE TABLE if NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY key NOT NULL,
     name text NOT NULL CHECK(name <> ''),
     price INTEGER NOT NULL CHECK(price >= 0)
 );
 
-CREATE TABLE if NOT EXISTS orders (
+CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY key NOT NULL,
     user_id INTEGER NOT NULL,
     CONSTRAINT fk_users FOREIGN key(user_id) REFERENCES users(id)
 );
 
-CREATE TABLE if NOT EXISTS order_lines (
+CREATE TABLE IF NOT EXISTS order_lines (
     line_id INTEGER PRIMARY KEY,
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
