@@ -24,80 +24,15 @@ Poznámky k implementaci:
 - Nezapomeň na ošetření vnějších vstupů.
 - Výsledné řešení ulož do veřejného GitHub repozitáře.
 
-## Installation
+**Solution** is described in [documentation](https://4e1e0603.github.io/230101/).
 
--
-
-  ```powershell
-  git clone https://github.com/4e1e0603/230101.git company-orders
-  ```
-
--
-
-  ```powershell
-  py -3.12 -m venv .venv && .\.venv\Scripts\activate
-  ````
-
--
-
-  ```powershell
-  python -m pip install .\company-orders
-  ```
-
-## Development
-
--
-
-  ```powershell
-  cd company-orders
-  ```
-
--
-
-  ```powershell
-  python -m pip install -e .
-  ```
-
--
-
-  ```powershell
-  python -m pip install -r requirements.txt
-  ```
-
-- We use [`mypy`](https://mypy-lang.org/) for type checking.
-
-  ```powershell
-  mypy --show-error-codes .
-  ```
-
-- We use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
-
-  ```powershell
-  ruff format . && ruff check --fix .
-  ```
-
-- Run all tests.
-s
-
-  ```shell
-  pytest  
-  ```
-
-- Run domain (unit) tests.
-
-  ```shell
-  pytest -m domain
-  ```
-
-- We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
-  
 ## Usage
 
-Database is created when the script is executed from the package data file, see [src/company/orders/schema.sql](schema.sql). You can also creata the schma by hand with `sqlite3` binary.
+A database is created when the script is executed from the package data file, see [src/company/orders/schema.sql](schema.sql). You can also creata schema by hand with a `sqlite3` binary e.g.
 
 ```shell
 ./sqlite3 orders.sqlite
-sqlite> .read schema.sql
+sqlite> .read path/to/schema.sql
 ```
 
 The package contains simple command line interface
@@ -105,3 +40,79 @@ The package contains simple command line interface
 ```shell
 company-orders --data [file_path]
 ```
+
+## Installation
+
+- Clone the repository.
+
+  ```powershell
+  git clone https://github.com/4e1e0603/230101.git company-orders
+  ```
+
+- Create  virtual environment.
+
+  ```powershell
+  py -3.12 -m venv .venv && .\.venv\Scripts\activate
+  ````
+
+- Install runtime dependencies.
+
+  ```powershell
+  python -m pip install .\company-orders
+  ```
+
+## Development
+
+- Go to project directory.
+
+  ```powershell
+  cd company-orders
+  ```
+
+- Install package in editable mode.
+
+  ```powershell
+  python -m pip install -e .
+  ```
+
+- Install development dependencies.
+
+  ```powershell
+  python -m pip install -r requirements.txt
+  ```
+
+- Use [`mypy`](https://mypy-lang.org/) for type checking.
+
+  ```powershell
+  mypy --show-error-codes .
+  ```
+
+- Use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
+
+  ```powershell
+  ruff format . && ruff check --fix .
+  ```
+
+- Run all available tests.
+
+  ```shell
+  pytest  
+  ```
+
+- Run only domain (unit) tests.
+
+  ```shell
+  pytest -m domain
+  ```
+
+- Create a documentation site.
+
+    ```powershell
+    python -m pip install -r docs/requirements.txt
+    ```
+
+    ```powershell
+    sphinx-build.exe .\source\ .\build\
+    ```
+  
+- We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
