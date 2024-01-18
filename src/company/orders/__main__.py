@@ -14,6 +14,8 @@ from company.orders import (
     OrderService,
 )
 
+from company.orders._storage import create_schema, delete_schema
+
 DATABASE_FILE = "orders.sqlite"
 
 
@@ -25,7 +27,7 @@ def main():
     logging.basicConfig(level=logging.INFO)
 
     # -----------------------------------------------------------------------
-    # Define a simple CLI interface.
+    # Define a simple command line interface.
     # -----------------------------------------------------------------------
     parser = argparse.ArgumentParser("company-orders", "Some company orders service")
     parser.add_argument("--data", required=True)
@@ -36,29 +38,19 @@ def main():
     LOGGER = None if not options.verbose else logging.getLogger(__name__)
 
     # -----------------------------------------------------------------------
-    # Create database schema form the scripts.
+    # Recreate database schema (this is only for showcase).
     # -----------------------------------------------------------------------
     with db.connect(DATABASE_FILE) as connection:
         schema_path = Path(Path(__file__).resolve().parents[1], "orders", "schema.sql")
-        # Crate a new tables.
         with open(schema_path, encoding="utf8") as schema:
-            statements = schema.read()
-        cursor = connection.cursor()
-        cursor.executescript(statements)
-        # Delete existing records.
-        delete_tables = """
-            delete from order_lines;
-            delete from products;
-            delete from orders;
-            delete from users;
-        """
-        cursor.executescript(delete_tables)
-        connection.commit()
+            schema_script = schema.read()
+        delete_schema(connection)
+        create_schema(connection, schema_script)
 
     # -----------------------------------------------------------------------
     # Showcase: the batch insert of data + use cases.
     # -----------------------------------------------------------------------
-    # Configure the application service.
+    # Configure the main application service.
     connection = db.connect(DATABASE_FILE)
 
     service = OrderService(
@@ -67,10 +59,12 @@ def main():
         product_repository=ProductRepository(connection),
         logger=LOGGER,
     )
+
     path = Path(options.data.strip())
     with open(path, encoding="utf8") as file:
         lines = file.readlines()
 
+    # Exceute commands and handle errors.
     error = (0, None)  # TODO namedtuple
     try:
         # We don't use comprehension to catch error for specific line.

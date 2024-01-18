@@ -3,7 +3,6 @@ This module contains database related code such as implementation
 of repositories for each aggregate. This is a infrastructure persistence layer.
 """
 
-
 from ._domain import User, Order, Product
 from ._shared import AbstractRepository
 
@@ -13,6 +12,24 @@ __all__ = [
     "ProductRepository",
     "OrderRepository",
 ]
+
+
+def create_schema(connection, schema_script: str) -> None:
+    cursor = connection.cursor()
+    cursor.executescript(schema_script)
+    connection.commit()
+
+
+def delete_schema(connection) -> None:
+    cursor = connection.cursor()
+    delete_tables = """
+        delete from order_lines;
+        delete from products;
+        delete from orders;
+        delete from users;
+    """
+    cursor.executescript(delete_tables)
+    connection.commit()
 
 
 class UserRepository(AbstractRepository[User]):
