@@ -14,10 +14,11 @@ __all__ = ["OrderService"]
 
 from pathlib import Path
 from typing import Iterable, TypeAlias
+from collections import Counter
 
 # Review: Some developers prefer basolute paths e.g. `meiro.orders._domain`
 
-from ._domain import User, Order, Product, Repository
+from ._domain import User, Order, OrderLine, Product, UserRepository, ProductRepository, OrderRepository
 from ._shared import DateTimeRange
 
 
@@ -48,9 +49,9 @@ class OrderService:
 
     def __init__(
         self,
-        user_repository: Repository[User],
-        order_repository: Repository[Order],
-        product_repository: Repository[Product],
+        user_repository: UserRepository,
+        order_repository: OrderRepository,
+        product_repository: ProductRepository,
         logger=None,
     ) -> None:
         self._user_repository = user_repository
@@ -93,20 +94,27 @@ class OrderService:
                     name=product_record["name"],
                     price=product_record["price"],
                 )
-                if self.product_repository.exists(product):
+                if not self.product_repository.exists(product):
                     self.product_repository.save(product)
                     inform(self.logger, f"Saved {product}")
                 products.append(product)
 
             # Extract and save a new order.
+            order_lines = [
+                OrderLine(product_id=product.identifier, quantity=quantity) 
+                for product,quantity in Counter(products).items()
+            ]
+        
             order = Order(
                 record["id"],
                 created=record["created"],
                 user=user.identifier,
-                products=[p.identifier for p in products],
+                order_lines=order_lines
             )
+            
             if self._order_repository.exists(order):
-                raise Exception("Conflict")  # TODO Improve exception class and message.
+                raise Exception("Order already exists")  # TODO Create custom exception class.
+            
             self._order_repository.save(order)
 
         # Store the orders in database.

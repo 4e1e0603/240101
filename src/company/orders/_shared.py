@@ -89,7 +89,7 @@ class Entity(ABC, Generic[Identifier]):
             for f in fields
             if (not f[0].startswith("_")) and (not f[0].startswith("__"))
         ]
-        return f"{type(self).__name__}({",".join(fields)})"
+        return f"{type(self).__name__}({','.join(fields)})"
 
     __repr__ = __str__  # Maybe prefer not to override this.
 

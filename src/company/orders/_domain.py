@@ -9,9 +9,14 @@ __all__ = [
     "User",
     "Order",
     "Product",
+    "UserRepository",
+    "OrderRepository",
+    "ProductRepository",
     "DomainError",
 ]
 
+
+from dataclasses import dataclass
 from typing import TypeAlias, Iterable, Self
 from datetime import datetime
 
@@ -19,15 +24,15 @@ from ._shared import Entity, Timestamp, Repository
 # Review: Some developers prefer absolute paths e.g. `meiro.orders._shared`.
 
 
+UserID: TypeAlias = int  # Mypy doesn't yet implements the *type statement* (3.12).
+ProductID: TypeAlias = int
+OrderID: TypeAlias = int
+
+
 class DomainError(Exception):
     """
     Represents an exception raised in domain layer.
     """
-
-
-UserID: TypeAlias = int  # Mypy doesn't yet implements the *type statement* (3.12).
-ProductID: TypeAlias = int
-OrderID: TypeAlias = int
 
 
 class User(Entity[UserID]):
@@ -65,7 +70,7 @@ class User(Entity[UserID]):
 
         :param name: The new user's name.
         """
-        return type(self)(id=self.identifier, name=name, city=self.city)
+        return type(self)(identifier=self.identifier, name=name, city=self.city)
 
     def change_city(self, city: str) -> Self:
         """
@@ -73,7 +78,7 @@ class User(Entity[UserID]):
 
         :param name: The new user's city.
         """
-        return type(self)(id=self.identifier, name=self.name, city=city)
+        return type(self)(identifier=self.identifier, name=self.name, city=city)
 
 
 class Product(Entity[ProductID]):
@@ -111,56 +116,41 @@ class Product(Entity[ProductID]):
         return self._price
 
 
+@dataclass(frozen=True, slots=True)
+class OrderLine:
+    """
+    The order lines for specific order.
+    """
+    product_id: ProductID
+    quantity: int = 1
+
+
 class Order(Entity[OrderID]):
     """
     The order domain model.
 
-    Contains 1 User and 1..N products.
+    Contains 1 user and 1..N order lines.
 
     ..note: You can probably change products (insert, remove) or
     assign the order to a different user. You cannot change `id` and
     `created` attributes. Can the order have a 0 products?
-
-    e.g.
-    {
-        "id": 21,
-        "created": 1538444645,
-        "products": [{"id": 2, "name": "Product C", "price": 140}],
-        "user": {"id": 0, "name": "User A", "city": "Prague"}
-    }
     """
 
     def __init__(
         self,
         identifier: OrderID,
         user: UserID,
+        order_lines: Iterable[OrderLine],
         created: datetime | Timestamp,
-        products: Iterable[ProductID],
     ) -> None:
         if identifier < 0:
             raise ValueError("Identifier cannot be a negative number")
-        if len(products) == 0:
-            raise ValueError("Products cannot be and empty collection")
-
         super().__init__(identifier=identifier)
         self._user = user
         self._created = (
             datetime.timestamp(created) if isinstance(created, datetime) else created
         )
-        self._products = frozenset(products)
-
-    # @classmethod
-    # def create(
-    #     cls: Type[Self],
-    #     id: OrderID,
-    #     user: UserID,
-    #     created: datetime | Timestamp,
-    #     products: ProductID
-    #     ) -> Type[Self]:
-    #     """
-    #     Create a new order with this factory method.
-    #     """
-    #     return cls(id=id, created = created, user=user, *products)
+        self._order_lines = frozenset(order_lines)
 
     @property
     def user(self) -> UserID:
@@ -171,8 +161,12 @@ class Order(Entity[OrderID]):
         return self._created
 
     @property
+    def order_lines(self) -> Iterable[OrderLine]:
+        return self._order_lines
+
+    @property
     def products(self) -> Iterable[ProductID]:
-        return sorted(tuple(self._products))
+        return sorted([x.product for x in self.order_lines])
 
     def has_product(self, product_id: ProductID) -> bool:
         return product_id in self.products
@@ -184,7 +178,7 @@ class Order(Entity[OrderID]):
         if not self.has_product(product_id):
             raise DomainError(f"Product {product_id} is not present")
         return type(self)(
-            id=self.id,
+            identifier=self.id,
             created=self.created,
             user=self.user,
             *self._products.difference(product_id),
@@ -195,6 +189,19 @@ class Order(Entity[OrderID]):
 
     def assign_to_user(user_id: UserID) -> Self:
         return NotImplemented
+    
+    # @classmethod 
+    # def create(
+    #     cls: Type[Self],
+    #     id: OrderID,
+    #     user: UserID,
+    #     created: datetime | Timestamp,
+    #     products: ProductID
+    #     ) -> Type[Self]:
+    #     """
+    #     Create a new order with this factory method instead of initializer.
+    #     """
+    #     return cls(identifier=id, created = created, user=user, *products)
 
 
 class UserRepository(Repository[User]):
@@ -202,11 +209,14 @@ class UserRepository(Repository[User]):
     The repository protocol (interface) for users.
     """
 
-    def save(self, aggregate: User) -> None:
-        ...
 
-    def find(self, aggregate: User) -> User | None:
-        ...
+class ProductRepository(Repository[Product]):
+    """
+    The repository protocol (interface) for products.
+    """
 
-    def exists(self, aggregate: User) -> bool:
-        ...
+
+class OrderRepository(Repository[Order]):
+    """
+    The repository protocol (interface) for orders.
+    """

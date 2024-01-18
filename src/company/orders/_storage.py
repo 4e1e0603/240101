@@ -30,7 +30,6 @@ class UserRepository(AbstractRepository[User]):
             cursor.execute(
                 statement, (aggregate.identifier, aggregate.name, aggregate.city)
             )
-        print(f"inserted {aggregate}", file=sys.stderr)  # DEBUG (remove)
 
     def find(self, aggregate: User) -> User | None:
         return NotImplemented
@@ -51,7 +50,11 @@ class ProductRepository(AbstractRepository[Product]):
         self.connection = connection
 
     def save(self, aggregate: Product) -> None:
-        return NotImplemented
+        statement = "insert into products (id, name, price) values (?, ?, ?);"
+        with self.connection as cursor:
+            cursor.execute(
+                statement, (aggregate.identifier, aggregate.name, aggregate.price)
+            )
 
     def find(self, aggregate: Product) -> Product | None:
         return NotImplemented
@@ -78,7 +81,7 @@ class OrderRepository(AbstractRepository[Order]):
         return NotImplemented
 
     def exists(self, aggregate: User) -> bool:
-        statement = "select id from orders where users.id = ?;"
+        statement = "select id from orders where orders.id = ?;"
         with self.connection as cursor:
             result = cursor.execute(statement, (aggregate.identifier,))
         return result.fetchone() is not None

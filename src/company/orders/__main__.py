@@ -27,9 +27,13 @@ def main():
     # -----------------------------------------------------------------------
     # Define a simple CLI interface.
     # -----------------------------------------------------------------------
-    parser = argparse.ArgumentParser("meiro-orders", "The orders service")
+    parser = argparse.ArgumentParser("company-orders", "Some company orders service")
     parser.add_argument("--data", required=True)
+    parser.add_argument('-v', '--verbose', action='store_true')
+    
     options = parser.parse_args()
+
+    LOGGER = None if not options.verbose else logging.getLogger(__name__)
 
     # -----------------------------------------------------------------------
     # Create database schema form the scripts.
@@ -51,22 +55,23 @@ def main():
         cursor.executescript(delete_tables)
         connection.commit()
 
+    # -----------------------------------------------------------------------
     # Showcase: the batch insert of data + use cases.
     # -----------------------------------------------------------------------
     # Configure the application service.
-    # -----------------------------------------------------------------------
     connection = db.connect(DATABASE_FILE)
 
     service = OrderService(
         user_repository=UserRepository(connection),
         order_repository=OrderRepository(connection),
         product_repository=ProductRepository(connection),
+        logger=LOGGER
     )
     path = Path(options.data.strip())
     with open(path, encoding="utf8") as file:
         lines = file.readlines()
 
-    error = (0, None)  # namedtuple?
+    error = (0, None)  # TODO namedtuple
     try:
         # We don't use comprehension to catch error for specific line.
         records = []

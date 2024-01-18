@@ -8,8 +8,8 @@ me
 
 ## Assignment (cs)
 
-- Vytvoř třídu `OrdersService`, která bude poskytovat následující rozhraní:
-  - Načtení záznamů ze vstupního souboru `data/orders.jsonl` a jejich uložení do **relační** databáze s vhodným databázovým modelem (cesta k souboru předaná parametrem).
+- Vytvoř třídu `OrderService`, která bude poskytovat následující rozhraní:
+  - Načtení záznamů ze vstupního souboru `orders.jsonl` a jejich uložení do **relační** databáze s vhodným databázovým modelem (cesta k souboru předaná parametrem).
     - V každém řádku se nachází data objednávek uživatelů.
     - Atributy uživatelů a produktů se napříč souborem nemění.
   - Získání objednávek za daný časový úsek (časový úsek předán parametrem).

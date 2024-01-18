@@ -1,0 +1,10 @@
+IPython
+ipykernel
+myst-parser
+nbsphinx
+sphinx
+sphinx-autoapi
+sphinx-github-changelog
+sphinx_rtd_theme
+sphinxcontrib-scm
+pandoc

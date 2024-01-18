@@ -38,7 +38,7 @@ namespaces = true
 orders = ["*.sql"]
 
 [project.scripts]
-meiro-orders = "meiro.orders.__main__:main"
+company-orders = "company.orders.__main__:main"
 
 [tool.setuptools.dynamic]
 readme = {file = ["README.md"]}
