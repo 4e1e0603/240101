@@ -121,6 +121,7 @@ class OrderLine:
     """
     The order lines for specific order.
     """
+
     product_id: ProductID
     quantity: int = 1
 
@@ -189,8 +190,8 @@ class Order(Entity[OrderID]):
 
     def assign_to_user(user_id: UserID) -> Self:
         return NotImplemented
-    
-    # @classmethod 
+
+    # @classmethod
     # def create(
     #     cls: Type[Self],
     #     id: OrderID,

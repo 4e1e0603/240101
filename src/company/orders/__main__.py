@@ -29,8 +29,8 @@ def main():
     # -----------------------------------------------------------------------
     parser = argparse.ArgumentParser("company-orders", "Some company orders service")
     parser.add_argument("--data", required=True)
-    parser.add_argument('-v', '--verbose', action='store_true')
-    
+    parser.add_argument("-v", "--verbose", action="store_true")
+
     options = parser.parse_args()
 
     LOGGER = None if not options.verbose else logging.getLogger(__name__)
@@ -65,7 +65,7 @@ def main():
         user_repository=UserRepository(connection),
         order_repository=OrderRepository(connection),
         product_repository=ProductRepository(connection),
-        logger=LOGGER
+        logger=LOGGER,
     )
     path = Path(options.data.strip())
     with open(path, encoding="utf8") as file:

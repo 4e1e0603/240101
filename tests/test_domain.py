@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from company.orders._domain import Order, Product, User
+from company.orders._domain import Order, Product, User, OrderLine
 
 
 @pytest.mark.domain
@@ -39,15 +39,35 @@ def test_product_inequality():
 
 @pytest.mark.domain
 def test_order_equality():
-    lhs = Order(1, user=1, created=datetime(2023, 12, 1), products=[1, 2, 3])
-    rhs = Order(1, user=2, created=datetime(2023, 12, 2), products=[4, 5, 6])
+    lhs = Order(
+        1,
+        user=1,
+        created=datetime(2023, 12, 1),
+        order_lines=[OrderLine(1, 1), OrderLine(2, 2), OrderLine(3, 3)],
+    )
+    rhs = Order(
+        1,
+        user=2,
+        created=datetime(2023, 12, 2),
+        order_lines=[OrderLine(1, 3), OrderLine(2, 2), OrderLine(3, 1)],
+    )
     assert lhs == rhs
     assert hash(lhs) == hash(rhs)
 
 
 @pytest.mark.domain
 def test_order_inequality():
-    lhs = Order(1, user=1, created=datetime(2023, 12, 1), products=[1, 2, 3])
-    rhs = Order(2, user=1, created=datetime(2023, 12, 1), products=[1, 2, 3])
+    lhs = Order(
+        1,
+        user=1,
+        created=datetime(2023, 12, 1),
+        order_lines=[OrderLine(1, 1), OrderLine(2, 2), OrderLine(3, 3)],
+    )
+    rhs = Order(
+        2,
+        user=2,
+        created=datetime(2023, 12, 2),
+        order_lines=[OrderLine(1, 1), OrderLine(2, 2), OrderLine(3, 3)],
+    )
     assert lhs != rhs
     assert hash(lhs) != hash(rhs)

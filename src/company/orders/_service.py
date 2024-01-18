@@ -18,7 +18,15 @@ from collections import Counter
 
 # Review: Some developers prefer basolute paths e.g. `meiro.orders._domain`
 
-from ._domain import User, Order, OrderLine, Product, UserRepository, ProductRepository, OrderRepository
+from ._domain import (
+    User,
+    Order,
+    OrderLine,
+    Product,
+    UserRepository,
+    ProductRepository,
+    OrderRepository,
+)
 from ._shared import DateTimeRange
 
 
@@ -101,20 +109,22 @@ class OrderService:
 
             # Extract and save a new order.
             order_lines = [
-                OrderLine(product_id=product.identifier, quantity=quantity) 
-                for product,quantity in Counter(products).items()
+                OrderLine(product_id=product.identifier, quantity=quantity)
+                for product, quantity in Counter(products).items()
             ]
-        
+
             order = Order(
                 record["id"],
                 created=record["created"],
                 user=user.identifier,
-                order_lines=order_lines
+                order_lines=order_lines,
             )
-            
+
             if self._order_repository.exists(order):
-                raise Exception("Order already exists")  # TODO Create custom exception class.
-            
+                raise Exception(
+                    "Order already exists"
+                )  # TODO Create custom exception class.
+
             self._order_repository.save(order)
 
         # Store the orders in database.

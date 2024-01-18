@@ -3,7 +3,6 @@ This module contains database related code such as implementation
 of repositories for each aggregate. This is a infrastructure persistence layer.
 """
 
-import sys
 
 from ._domain import User, Order, Product
 from ._shared import AbstractRepository
