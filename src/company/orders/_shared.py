@@ -6,9 +6,10 @@ This module contains a shared code and general abstractions.
 # Mypy is not smart enough to figure out that your decorator calls `abc.abstractmethod`
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Protocol, TypeAlias
+from typing import TypeVar, Generic, Protocol, TypeAlias, Any
 from dataclasses import dataclass
 from datetime import datetime
+from functools import cached_property
 
 
 __all__ = [
@@ -19,7 +20,17 @@ __all__ = [
     "DateTimeRange",
     "Name",
     "Identifiable",
+    "flatten",
 ]
+
+
+def flatten(xss: list[list[Any]]) -> list[Any]:
+    """Flatten the given list.
+
+    :param xss: The list of lists.
+    :return: the flattended list of items.
+    """
+    return [x for xs in xss for x in xs]
 
 
 @dataclass(frozen=True, slots=True)
@@ -28,11 +39,23 @@ class DateTimeRange:
     The value object represents the date and time range.
     """
 
-    lower_bound: datetime
-    upper_bound: datetime
+    since: datetime
+    till: datetime
 
     def __post_init__(self) -> None:
-        """check the boundaries lower >= upper"""
+        """check the boundaries since < till"""
+
+    @property
+    def since_timestamp(self) -> int:
+        return (self.since - datetime(1970, 1, 1)).total_seconds()
+
+    @property
+    def till_timestamp(self) -> int:
+        return (self.till - datetime(1970, 1, 1)).total_seconds()
+    
+    @property
+    def duration(self): 
+        return NotImplemented
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,7 +68,7 @@ class Name:
 
 
 Timestamp: TypeAlias = float
-"""The timestamp alias for primitive float value."""
+"""The (Unix) timestamp alias for primitive float value."""
 # type Timestamp = float
 # NOTE PEP 695 type aliases are not yet supported by Mypy (2023-01-08)
 

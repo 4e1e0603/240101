@@ -41,13 +41,13 @@ def test_product_inequality():
 def test_order_equality():
     lhs = Order(
         1,
-        user=1,
+        user_id=1,
         created=datetime(2023, 12, 1),
         order_lines=[OrderLine(1, 1), OrderLine(2, 2), OrderLine(3, 3)],
     )
     rhs = Order(
         1,
-        user=2,
+        user_id=2,
         created=datetime(2023, 12, 2),
         order_lines=[OrderLine(1, 3), OrderLine(2, 2), OrderLine(3, 1)],
     )
@@ -59,13 +59,13 @@ def test_order_equality():
 def test_order_inequality():
     lhs = Order(
         1,
-        user=1,
+        user_id=1,
         created=datetime(2023, 12, 1),
         order_lines=[OrderLine(1, 1), OrderLine(2, 2), OrderLine(3, 3)],
     )
     rhs = Order(
         2,
-        user=2,
+        user_id=2,
         created=datetime(2023, 12, 2),
         order_lines=[OrderLine(1, 1), OrderLine(2, 2), OrderLine(3, 3)],
     )

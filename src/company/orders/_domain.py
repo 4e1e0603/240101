@@ -140,22 +140,22 @@ class Order(Entity[OrderID]):
     def __init__(
         self,
         identifier: OrderID,
-        user: UserID,
+        user_id: UserID,
         order_lines: Iterable[OrderLine],
         created: datetime | Timestamp,
     ) -> None:
         if identifier < 0:
             raise ValueError("Identifier cannot be a negative number")
         super().__init__(identifier=identifier)
-        self._user = user
+        self._user_id = user_id
         self._created = (
             datetime.timestamp(created) if isinstance(created, datetime) else created
         )
         self._order_lines = frozenset(order_lines)
 
     @property
-    def user(self) -> UserID:
-        return self._user
+    def user_id(self) -> UserID:
+        return self._user_id
 
     @property
     def created(self) -> Timestamp:
@@ -163,33 +163,31 @@ class Order(Entity[OrderID]):
 
     @property
     def order_lines(self) -> Iterable[OrderLine]:
-        return self._order_lines
+        return tuple(self._order_lines)
 
-    @property
-    def products(self) -> Iterable[ProductID]:
-        return sorted([x.product for x in self.order_lines])
+    # TODO Future work
+    # @property
+    # def products(self) -> Iterable[ProductID]:
+    #     return sorted([x.product_id for x in self.order_lines])
 
-    def has_product(self, product_id: ProductID) -> bool:
-        return product_id in self.products
+    # def has_product(self, product_id: ProductID) -> bool:
+    #     return product_id in self.order_lines
 
-    def has_same_products(self, other: Self) -> bool:
-        return self.products == other.products
+    # def has_same_products(self, other: Self) -> bool:
+    #     return self.products == other.products
 
-    def remove_product(self, product_id: ProductID) -> Self:
-        if not self.has_product(product_id):
-            raise DomainError(f"Product {product_id} is not present")
-        return type(self)(
-            identifier=self.id,
-            created=self.created,
-            user=self.user,
-            *self._products.difference(product_id),
-        )
+    # def remove_product(self, product_id: ProductID) -> Self:
+    #     if not self.has_product(product_id):
+    #         raise DomainError(f"Product {product_id} is not present")
+    #     return type(self)(
+    #         identifier=self.id,
+    #         created=self.created,
+    #         user=self.user,
+    #         *self._products.difference(product_id),
+    #     )
 
-    def insert_product(self, product_id: ProductID) -> Self:
-        return NotImplemented
-
-    def assign_to_user(user_id: UserID) -> Self:
-        return NotImplemented
+    # def insert_product(self, product_id: ProductID, quantity) -> Self:
+    #     return NotImplemented
 
     # @classmethod
     # def create(
@@ -207,17 +205,17 @@ class Order(Entity[OrderID]):
 
 class UserRepository(Repository[User]):
     """
-    The repository protocol (interface) for users.
+    The repository protocol for users.
     """
 
 
 class ProductRepository(Repository[Product]):
     """
-    The repository protocol (interface) for products.
+    The repository protocol for products.
     """
 
 
 class OrderRepository(Repository[Order]):
     """
-    The repository protocol (interface) for orders.
+    The repository protocol for orders.
     """

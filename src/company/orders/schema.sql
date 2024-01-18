@@ -18,11 +18,11 @@ CREATE TABLE IF NOT EXISTS version (
 );
 
 -- Table comments are not suported so we add our comments to custom table.
-CREATE TABLE IF NOT EXISTS table_comments (
-    table_name text,
-    table_comment text,
-    CONSTRAINT pk_table_comments PRIMARY key (table_name, table_comment)
-);
+-- CREATE TABLE IF NOT EXISTS table_comments (
+--     table_name text,
+--     table_comment text,
+--     CONSTRAINT pk_table_comments PRIMARY key (table_name, table_comment)
+-- );
 
 -- insert into table_comments (table_name, table_comment) values ("users", "The users of our application");
 -- insert into table_comments (table_name, table_comment) values ("products", "The products ordered by our users");
@@ -43,14 +43,15 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY key NOT NULL,
     user_id INTEGER NOT NULL,
+    created TIMESTAMP(10) NOT NULL,
     CONSTRAINT fk_users FOREIGN key(user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS order_lines (
-    line_id INTEGER PRIMARY KEY,
     order_id INTEGER NOT NULL,
     product_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT fk_orders FOREIGN key(order_id) REFERENCES orders(id) ON DELETE cascade,
     CONSTRAINT fk_products FOREIGN key(product_id) REFERENCES products(id) ON DELETE cascade
-    -- constraint pk_order_lines primary key (line_id, order_id, product_id) -- todo quantity per order
+    CONSTRAINT pk_order_lines PRIMARY KEY (order_id, product_id)
 );
