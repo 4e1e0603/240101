@@ -16,7 +16,6 @@ requires-python = ">=3.12"
 license = {text = "MIT"}
 
 dependencies = [
-    "sqlalchemy"
 ]
 
 classifiers = [
