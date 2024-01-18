@@ -6,6 +6,7 @@
 :maxdepth: 2
 :hidden:
 
+solution
 explore
 autoapi/index
 ```
