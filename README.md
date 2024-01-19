@@ -5,7 +5,9 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a70ed10bc4b949f7a236e67d1ff0287f)](https://app.codacy.com/gh/4e1e0603/230101/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 <p align="center">
-  <img src="snake.png" width=250px />
+  
+  <img src="./snake.png" width=250px />
+
 </p>
 
 ## Assignment (cs)
