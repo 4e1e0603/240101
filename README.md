@@ -84,11 +84,15 @@ company-orders --data [file_path]
 - Use [`mypy`](https://mypy-lang.org/) for type checking.
 
   ```powershell
-  cd src/  # because mypy hell
+  cd src/  # because Mypy weird error, see comment bellow
   mypy --show-column-numbers --namespace-packages --explicit-package-bases .
   ```
 
-(Sometimes mypy has some obscure errors: <https://notes.jml.io/2021-02-06-15-26/>)
+Sometimes mypy has some obscure errors: <https://notes.jml.io/2021-02-06-15-26/>, e.g:
+
+```shell
+src\company\orders\_domain.py: error: Source file found twice under different module names: "src.company.orders._domain" and "company.orders._domain"
+```
 
 - Use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
 
