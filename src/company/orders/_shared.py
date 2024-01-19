@@ -9,7 +9,6 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, Protocol, TypeAlias, Any
 from dataclasses import dataclass
 from datetime import datetime
-from functools import cached_property
 
 
 __all__ = [
@@ -21,7 +20,14 @@ __all__ = [
     "Name",
     "Identifiable",
     "flatten",
+    "inform",
 ]
+
+
+def inform(logger, message) -> None:
+    """Print the message when the logger is provided, otherwise skip."""
+    if logger is not None:
+        logger.info(message)
 
 
 def flatten(xss: list[list[Any]]) -> list[Any]:
@@ -31,6 +37,13 @@ def flatten(xss: list[list[Any]]) -> list[Any]:
     :return: the flattended list of items.
     """
     return [x for xs in xss for x in xs]
+
+
+class JsonError(ValueError):
+    """
+    The exception raised when parsing JSON from text.
+    Has better semantics then `` ValueError`` raise by :mod:`json`.
+    """
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,9 +65,9 @@ class DateTimeRange:
     @property
     def till_timestamp(self) -> int:
         return (self.till - datetime(1970, 1, 1)).total_seconds()
-    
+
     @property
-    def duration(self): 
+    def duration(self):
         return NotImplemented
 
 

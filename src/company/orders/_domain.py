@@ -24,15 +24,15 @@ from ._shared import Entity, Timestamp, Repository
 # Review: Some developers prefer absolute paths e.g. `meiro.orders._shared`.
 
 
-UserID: TypeAlias = int  # Mypy doesn't yet implements the *type statement* (3.12).
-ProductID: TypeAlias = int
-OrderID: TypeAlias = int
-
-
 class DomainError(Exception):
     """
     Represents an exception raised in domain layer.
     """
+
+
+# ########################################################################### #
+
+UserID: TypeAlias = int
 
 
 class User(Entity[UserID]):
@@ -81,6 +81,17 @@ class User(Entity[UserID]):
         return type(self)(identifier=self.identifier, name=self.name, city=city)
 
 
+class UserRepository(Repository[User]):
+    """
+    The repository protocol for users.
+    """
+
+
+# ########################################################################### #
+
+ProductID: TypeAlias = int
+
+
 class Product(Entity[ProductID]):
     """
     The product domain model.
@@ -114,6 +125,17 @@ class Product(Entity[ProductID]):
         :returns: a product's price.
         """
         return self._price
+
+
+class ProductRepository(Repository[Product]):
+    """
+    The repository protocol for products.
+    """
+
+
+# ########################################################################### #
+
+OrderID: TypeAlias = int
 
 
 @dataclass(frozen=True, slots=True)
@@ -165,30 +187,17 @@ class Order(Entity[OrderID]):
     def order_lines(self) -> Iterable[OrderLine]:
         return tuple(self._order_lines)
 
+    @property
+    def _products(self) -> Iterable[ProductID]:
+        return sorted([_.product_id for _ in self.order_lines])
+
+    def has_product(self, product_id: ProductID) -> bool:
+        return product_id in self._products
+
+    def has_same_products(self, other: Self) -> bool:
+        return self._products == other._products
+
     # TODO Future work
-    # @property
-    # def products(self) -> Iterable[ProductID]:
-    #     return sorted([x.product_id for x in self.order_lines])
-
-    # def has_product(self, product_id: ProductID) -> bool:
-    #     return product_id in self.order_lines
-
-    # def has_same_products(self, other: Self) -> bool:
-    #     return self.products == other.products
-
-    # def remove_product(self, product_id: ProductID) -> Self:
-    #     if not self.has_product(product_id):
-    #         raise DomainError(f"Product {product_id} is not present")
-    #     return type(self)(
-    #         identifier=self.id,
-    #         created=self.created,
-    #         user=self.user,
-    #         *self._products.difference(product_id),
-    #     )
-
-    # def insert_product(self, product_id: ProductID, quantity) -> Self:
-    #     return NotImplemented
-
     # @classmethod
     # def create(
     #     cls: Type[Self],
@@ -201,18 +210,6 @@ class Order(Entity[OrderID]):
     #     Create a new order with this factory method instead of initializer.
     #     """
     #     return cls(identifier=id, created = created, user=user, *products)
-
-
-class UserRepository(Repository[User]):
-    """
-    The repository protocol for users.
-    """
-
-
-class ProductRepository(Repository[Product]):
-    """
-    The repository protocol for products.
-    """
 
 
 class OrderRepository(Repository[Order]):

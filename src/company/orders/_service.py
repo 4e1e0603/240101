@@ -1,12 +1,5 @@
 """
-This module a service layer related code.
-
-timetable
-mon 01 01 14:15-14:50
-sun 07 01 10:30-16:30
-mon 08 01 21:00-
-tue 09 01
-wed 10 01
+This module contains a service layer related code.
 """
 
 __all__ = ["OrderService"]
@@ -17,7 +10,7 @@ from typing import Iterable, Iterator, TypeAlias
 from collections import Counter
 import datetime
 
-# Review: Some developers prefer basolute paths e.g. `meiro.orders._domain`
+# Review: Some developers prefer absolute paths e.g. `company.orders._domain`
 
 from ._domain import (
     User,
@@ -28,23 +21,11 @@ from ._domain import (
     ProductRepository,
     OrderRepository,
 )
-from ._shared import DateTimeRange
+from ._shared import DateTimeRange, inform
 from ._storage import ConflictError
-
-class JsonError(ValueError):
-    """
-    The exception raised when parsing JSON from text.
-    Has better semantics then `` ValueError`` raise by :mod:`json`.
-    """
 
 
 JSON: TypeAlias = str
-
-
-def inform(logger, message) -> None:
-    """Print the message when the logger is provided, otherwise skip."""
-    if logger is not None:
-        logger.info(message)
 
 
 class OrderService:
@@ -68,20 +49,25 @@ class OrderService:
         self.product_repository = product_repository
         self.logger = logger
 
-    def seach_orders_by_date_range(self, since: datetime.datetime, till: datetime.datetime) -> Iterator[Order]:
+    def seach_orders_by_date_range(
+        self, since: datetime.datetime, till: datetime.datetime
+    ) -> Iterator[Order]:
         date_time_range = DateTimeRange(since=since, till=till)
-        result = self._order_repository.find_between(date_time_range.since_timestamp, date_time_range.till_timestamp)
+        result = self._order_repository.find_between(
+            date_time_range.since_timestamp, date_time_range.till_timestamp
+        )
         yield from result
 
-    def search_users_with(limit) -> Iterable[User]:
-        return NotImplemented
+    def search_users_with_most_orders(limit) -> Iterable[User]:
+        # select * from group by from database
+        ...
 
     def batch_insert(self, records: Iterable[JSON] | Path) -> None:
         """
         A batch insert from provided JSON-line dataset.
 
         :param records: The records to be parsed.
-        :raises: :class:`ConflictError`: when an order already exists. 
+        :raises: :class:`ConflictError`: when an order already exists.
         """
         # NOTE This should probably be a transactional with rollback if something goes wrong.
         # We can use a Unit of Work pattern / context manager.
@@ -134,4 +120,3 @@ class OrderService:
 
         # [4] Store the orders as batch.
         self._order_repository.save(*orders)
-

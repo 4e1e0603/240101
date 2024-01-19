@@ -3,7 +3,7 @@ This module contains database related code such as implementation
 of repositories for each aggregate. This is a infrastructure persistence layer.
 """
 
-from typing import Iterable, Iterator
+from typing import Iterator
 
 from ._domain import User, Order, Product, OrderLine
 from ._shared import AbstractRepository, flatten, Timestamp
@@ -126,25 +126,27 @@ class OrderRepository(AbstractRepository[Order]):
             found = cursor.execute(statement, (aggregate.identifier,))
         result = found.fetchone() is not None
         return result
-    
+
     def find_between(self, since: Timestamp, till: Timestamp) -> Iterator[Order]:
         statement = """
             select o.id,  o.created, o.user_id, l.product_id, l.quantity 
             from orders o join order_lines l on o.id = l.order_id 
             and o.created between ? and ?"""
         with self.connection as cursor:
-            found = cursor.execute(statement, (since, till)).fetchall()            
+            found = cursor.execute(statement, (since, till)).fetchall()
             from itertools import groupby
+
             found.sort(key=lambda x: x[0])
             # Group values by a key e.g. `{(15, 1542373774, 0): [(11, 1), (9, 1)]`.
             #                                     order            order_lines
             for key, group in groupby(found, key=lambda x: (x[0], x[1], x[2])):
                 order = Order(
-                    identifier=key[0], 
-                    user_id=key[2], 
-                    created=key[1], 
-                    order_lines= [OrderLine(
-                        product_id=item[-2], quantity=item[-1]
-                    ) for item in group]
+                    identifier=key[0],
+                    user_id=key[2],
+                    created=key[1],
+                    order_lines=[
+                        OrderLine(product_id=item[-2], quantity=item[-1])
+                        for item in group
+                    ],
                 )
                 yield order

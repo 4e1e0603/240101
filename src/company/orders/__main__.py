@@ -46,6 +46,7 @@ def main():
             schema_script = schema.read()
         delete_schema(connection)
         create_schema(connection, schema_script)
+        connection.commit()
 
     # -----------------------------------------------------------------------
     # Showcase: the batch insert of data + use cases.
@@ -71,22 +72,31 @@ def main():
         print("\n===[TASK 1]===\n", file=sys.stderr)
         # ################################################################### #
         # We don't use comprehension to catch error for specific line.
+        
         records = []
         for index, line in enumerate(lines):
             records.append(json.loads(line))
             print(f"Processed records {index + 1}/{len(lines)}", file=sys.stderr)
             sys.stderr.write("\033[F")
+
         service.batch_insert(records=records)
 
         # ################################################################### #
         print("\n\n===[TASK 2]===\n", file=sys.stderr)
         # ################################################################### #
         orders = service.seach_orders_by_date_range(
-            since=datetime.datetime(year=2018, month=11, day=16, hour=1, minute=29, second=4),
-            till=datetime.datetime(year=2018, month=11, day=20, hour=10, minute=45, second=30)
+            since=datetime.datetime(
+                year=2018, month=11, day=16, hour=1, minute=29, second=4      # an example taken from dataset
+            ),
+            till=datetime.datetime(
+                year=2018, month=11, day=20, hour=10, minute=45, second=30    # an example taken from dataset
+            ),
         )
         for order in orders:
-            print(f"Order(id={order.identifier},created='{datetime.datetime.fromtimestamp(order.created)}')", file=sys.stdout)
+            print(
+                f"Order(id={order.identifier},created='{datetime.datetime.fromtimestamp(order.created)}')",
+                file=sys.stdout,
+            )
 
         # ################################################################### #
         print("\n===[TASK 3]===\n", file=sys.stderr)
