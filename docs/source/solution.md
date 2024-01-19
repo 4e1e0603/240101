@@ -1,5 +1,7 @@
 # Solution (cs)
 
+**ještě v přípravě**
+
 Vytvořil jsem Python balík s názvem `company-orders` a jednoduchým ukázkovým konzolovým rohraním (skript).  
 
 ## Doménová vrstva
