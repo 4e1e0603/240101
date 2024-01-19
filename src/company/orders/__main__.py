@@ -12,9 +12,9 @@ from company.orders import (
     ProductRepository,
     OrderRepository,
     OrderService,
+    create_schema,
+    delete_schema,
 )
-
-from company.orders._storage import create_schema, delete_schema
 
 DATABASE_FILE = "orders.sqlite"
 
@@ -72,7 +72,7 @@ def main():
         print("\n===[TASK 1]===\n", file=sys.stderr)
         # ################################################################### #
         # We don't use comprehension to catch error for specific line.
-        
+
         records = []
         for index, line in enumerate(lines):
             records.append(json.loads(line))
@@ -86,10 +86,20 @@ def main():
         # ################################################################### #
         orders = service.seach_orders_by_date_range(
             since=datetime.datetime(
-                year=2018, month=11, day=16, hour=1, minute=29, second=4      # an example taken from dataset
+                year=2018,
+                month=11,
+                day=16,
+                hour=1,
+                minute=29,
+                second=4,  # an example taken from dataset
             ),
             till=datetime.datetime(
-                year=2018, month=11, day=20, hour=10, minute=45, second=30    # an example taken from dataset
+                year=2018,
+                month=11,
+                day=20,
+                hour=10,
+                minute=45,
+                second=30,  # an example taken from dataset
             ),
         )
         for order in orders:

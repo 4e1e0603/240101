@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, Protocol, TypeAlias, Any
 from dataclasses import dataclass
 from datetime import datetime
-
+import inspect
 
 __all__ = [
     "Entity",
@@ -60,14 +60,14 @@ class DateTimeRange:
 
     @property
     def since_timestamp(self) -> int:
-        return (self.since - datetime(1970, 1, 1)).total_seconds()
+        return int((self.since - datetime(1970, 1, 1)).total_seconds())
 
     @property
     def till_timestamp(self) -> int:
-        return (self.till - datetime(1970, 1, 1)).total_seconds()
+        return int((self.till - datetime(1970, 1, 1)).total_seconds())
 
     @property
-    def duration(self):
+    def duration(self) -> int:
         return NotImplemented
 
 
@@ -117,15 +117,13 @@ class Entity(ABC, Generic[Identifier]):
         return hash((type(self), self.identifier))
 
     def __str__(self) -> str:
-        import inspect
-
         fields = inspect.getmembers(type(self), lambda a: not (inspect.isroutine(a)))
-        fields = [
+        fields_filtered = [
             f"{f[0]}={getattr(self, str(f[0]))}"
             for f in fields
             if (not f[0].startswith("_")) and (not f[0].startswith("__"))
         ]
-        return f"{type(self).__name__}({','.join(fields)})"
+        return f"{type(self).__name__}({','.join(fields_filtered)})"
 
     __repr__ = __str__  # Maybe prefer not to override this.
 

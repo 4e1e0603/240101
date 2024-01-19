@@ -5,8 +5,8 @@ of repositories for each aggregate. This is a infrastructure persistence layer.
 
 from typing import Iterator
 
-from ._domain import User, Order, Product, OrderLine
-from ._shared import AbstractRepository, flatten, Timestamp
+from company.orders._domain import User, Order, Product, OrderLine
+from company.orders._shared import AbstractRepository, flatten, Timestamp
 
 
 __all__ = [
@@ -38,7 +38,7 @@ def delete_schema(connection) -> None:
 
 
 class ConflictError(Exception):
-    ...
+    """Raised when the entity is already present."""
 
 
 class UserRepository(AbstractRepository[User]):
@@ -128,6 +128,13 @@ class OrderRepository(AbstractRepository[Order]):
         return result
 
     def find_between(self, since: Timestamp, till: Timestamp) -> Iterator[Order]:
+        """
+        Find orders in a specified range.
+
+        :param since: ...
+        :param till:  ...
+        :returns: ...
+        """
         statement = """
             select o.id,  o.created, o.user_id, l.product_id, l.quantity 
             from orders o join order_lines l on o.id = l.order_id 

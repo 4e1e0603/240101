@@ -84,8 +84,11 @@ company-orders --data [file_path]
 - Use [`mypy`](https://mypy-lang.org/) for type checking.
 
   ```powershell
-  mypy --show-error-codes .
+  cd src/  # because mypy hell
+  mypy --show-column-numbers --namespace-packages --explicit-package-bases .
   ```
+
+(Sometimes mypy has some obscure errors: <https://notes.jml.io/2021-02-06-15-26/>)
 
 - Use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
 

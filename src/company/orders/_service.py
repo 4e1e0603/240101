@@ -10,9 +10,7 @@ from typing import Iterable, Iterator, TypeAlias
 from collections import Counter
 import datetime
 
-# Review: Some developers prefer absolute paths e.g. `company.orders._domain`
-
-from ._domain import (
+from company.orders._domain import (
     User,
     Order,
     OrderLine,
@@ -21,8 +19,8 @@ from ._domain import (
     ProductRepository,
     OrderRepository,
 )
-from ._shared import DateTimeRange, inform
-from ._storage import ConflictError
+from company.orders._shared import DateTimeRange, inform
+from company.orders._storage import ConflictError
 
 
 JSON: TypeAlias = str
@@ -59,8 +57,8 @@ class OrderService:
         yield from result
 
     def search_users_with_most_orders(limit) -> Iterable[User]:
-        # select * from group by from database
-        ...
+        # group by from database
+        return NotImplemented
 
     def batch_insert(self, records: Iterable[JSON] | Path) -> None:
         """

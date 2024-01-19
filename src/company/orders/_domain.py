@@ -17,11 +17,10 @@ __all__ = [
 
 
 from dataclasses import dataclass
-from typing import TypeAlias, Iterable, Self
+from typing import TypeAlias, Iterable, Self, Iterator
 from datetime import datetime
 
-from ._shared import Entity, Timestamp, Repository
-# Review: Some developers prefer absolute paths e.g. `meiro.orders._shared`.
+from company.orders._shared import Entity, Timestamp, Repository
 
 
 class DomainError(Exception):
@@ -50,6 +49,8 @@ class User(Entity[UserID]):
     @property
     def name(self) -> str:
         """
+        Returns a user's name.
+
         :returns: a user's name.
         """
         return self._name
@@ -57,7 +58,9 @@ class User(Entity[UserID]):
     @property
     def city(self) -> str:
         """
-        :returns: a user's city.
+        Returns a user's city name.
+
+        :returns: a user's city name.
         """
         return self._city
 
@@ -216,3 +219,13 @@ class OrderRepository(Repository[Order]):
     """
     The repository protocol for orders.
     """
+
+    def find_between(self, since: Timestamp, till: Timestamp) -> Iterator[Order]:
+        """
+        Find orders in a specified range.
+
+        :param since: ...
+        :param till:  ...
+        :returns: ...
+        """
+        return NotImplemented
