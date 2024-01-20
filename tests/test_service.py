@@ -1,6 +1,6 @@
 import pytest
 
-from typing import Generic,TypeVar
+from typing import Generic, TypeVar
 
 from company.orders import User, Product, Order, OrderService
 from company.orders._storage import ConflictError
@@ -8,6 +8,7 @@ from company.orders._storage import ConflictError
 # Create fake repositories to be injected to initializer of service.
 
 T = TypeVar("T")
+
 
 class FakeRepository(Generic[T]):
     def __init__(self) -> None:
@@ -17,7 +18,7 @@ class FakeRepository(Generic[T]):
         if self.exists(aggregate):
             raise ConflictError
         self._storage[aggregate] = aggregate
-        
+
     def find(self, aggregate) -> User | None:
         return self._storage.get(aggregate, None)
 
@@ -27,8 +28,12 @@ class FakeRepository(Generic[T]):
 
 class FakeUserRepository(FakeRepository[User]):
     pass
+
+
 class FakeProductRepository(FakeRepository[Product]):
     pass
+
+
 class FakeOrderRepository(FakeRepository[Order]):
     pass
 
@@ -44,14 +49,12 @@ def order_service():
     service = OrderService(
         user_repository=FakeUserRepository(),
         product_repository=FakeProductRepository(),
-        order_repository=FakeOrderRepository()
+        order_repository=FakeOrderRepository(),
     )
     return service
-    
+
 
 def test_order_service_method1(order_service):
-    record = [
-    ]
 
     return NotImplemented
 

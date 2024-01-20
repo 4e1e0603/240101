@@ -47,6 +47,8 @@ class OrderService:
         self.product_repository = product_repository
         self.logger = logger
 
+    # ############################## Queries ############################## #
+
     def search_orders_by_date_range(
         self, since: datetime.datetime, till: datetime.datetime
     ) -> Iterator[Order]:
@@ -57,11 +59,36 @@ class OrderService:
         )
         yield from result
 
-    def search_users_with_most_products(self, limit = 3) -> Iterable[User]:
+    def search_users_with_most_products(self, limit=3) -> Iterable[User]:
+        """
+        Search users which purchased most products in descending order.
+
+        :param limit: The limit how much users to return.
+        :returns: the users with most purchased products. 
+        """
+        # This works, but probably should be implemented another way.
+        # We reuse the connection from reposiotry class which is not very clean.
+        # But where to place code (e.g. in which repositories) which spans multiple aggregates?
+        # For performance reasons, this is a good solution, but from architectural point of view, not so.
         con = self._user_repository.connection
         with con as cursor:
-            found = cursor.execute("select orders.user_id, sum(order_lines.quantity) from orders join order_lines on order_lines.order_id = orders.id group by orders.user_id order by sum(order_lines.quantity) desc limit ?;", (limit,))
-            return found.fetchall()
+            found = cursor.execute("""       
+                select orders.user_id, users.name, users.city, sum(order_lines.quantity) 
+                from orders 
+                join order_lines on order_lines.order_id = orders.id 
+                join users on users.id = orders.user_id
+                group by orders.user_id 
+                order by sum(order_lines.quantity) 
+                desc 
+                limit 3;
+            """, (limit,),
+            ).fetchall()
+
+            for item in found:
+                yield item
+
+
+    # ############################## Commands ############################# #
 
     def batch_insert_orders(self, records: Iterable[JSON] | Path) -> None:
         """

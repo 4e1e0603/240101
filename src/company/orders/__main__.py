@@ -107,11 +107,11 @@ def main():
                 f"Order(id={order.identifier},created='{datetime.datetime.fromtimestamp(order.created)}')",
                 file=sys.stdout,
             )
-            
+
         # ################################################################### #
         print("\n===[TASK 3]===\n", file=sys.stderr)
         # ################################################################### #
-        top_users = service.search_users_with_most_products(limit = 5)
+        top_users = service.search_users_with_most_products(limit=5)
         print(top_users)
 
     except FileNotFoundError:
