@@ -87,7 +87,7 @@ Timestamp: TypeAlias = float
 
 
 Identifier = TypeVar("Identifier")
-"""Some unique entitie's identifier."""
+"""The identifier that is unique per aggregates."""
 
 
 class Identifiable(Protocol, Generic[Identifier]):

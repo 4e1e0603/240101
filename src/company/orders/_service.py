@@ -47,20 +47,23 @@ class OrderService:
         self.product_repository = product_repository
         self.logger = logger
 
-    def seach_orders_by_date_range(
+    def search_orders_by_date_range(
         self, since: datetime.datetime, till: datetime.datetime
     ) -> Iterator[Order]:
+        """TODO"""
         date_time_range = DateTimeRange(since=since, till=till)
         result = self._order_repository.find_between(
             date_time_range.since_timestamp, date_time_range.till_timestamp
         )
         yield from result
 
-    def search_users_with_most_orders(limit) -> Iterable[User]:
-        # group by from database
-        return NotImplemented
+    def search_users_with_most_products(self, limit = 3) -> Iterable[User]:
+        con = self._user_repository.connection
+        with con as cursor:
+            found = cursor.execute("select orders.user_id, sum(order_lines.quantity) from orders join order_lines on order_lines.order_id = orders.id group by orders.user_id order by sum(order_lines.quantity) desc limit ?;", (limit,))
+            return found.fetchall()
 
-    def batch_insert(self, records: Iterable[JSON] | Path) -> None:
+    def batch_insert_orders(self, records: Iterable[JSON] | Path) -> None:
         """
         A batch insert from provided JSON-line dataset.
 

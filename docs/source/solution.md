@@ -1,4 +1,6 @@
-# Solution (cs)
+# Solution
+
+(czech)
 
 Vytvořil jsem Python balík s názvem `company-orders` a jednoduchým ukázkovým konzolovým rozhraním.  
 
@@ -30,13 +32,17 @@ Pro ukázaku jsem vytvořil jednoduché databázové schema pomocí SQLite v sou
 Přístup do databáze je implementován pomocí *repository pattern*. Ty jsou reprezentováný rohraními (protokoly) uložené v doménové vrstvě a implementací v `company.orders._storage.py`
 Lze tak jednoduše implementovat perzistenci pro jiný databázový server nebo ukládání in-memory.
 
-## Ukázka práce
+## Ukázka funckionality
 
 Demonstarční příklad s jednoduchým konzolovým rohraním je uložen v modulu `company.orders.__main__`. ten obsahuje tři úlohy:
 
 1. importuje data ze zadaného souboru (`ndjson`/`jsonl`)
 2. vybere objednávky v zadaném časovém období
 3. vybere horních deset uživatelů s nejvíce objednávkami za celou historii.
+
+## Testování
+
+&hellip;
 
 ## Poznámky
 
@@ -61,6 +67,6 @@ jako kontejner (např. Docker/Podman, Kubernetes).
 
 Hudba pro code review:
 
-- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Twilight Sniping (2001)*](https://youtu.be/iroXKdSqSPo?si=ZS2LRkEI3accxks5)
+- [*Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Countdown To Disaster (2001)*](https://www.youtube.com/watch?v=Vmp6e5H_4s8)
 
 </small>

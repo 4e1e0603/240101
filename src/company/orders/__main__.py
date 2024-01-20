@@ -79,12 +79,12 @@ def main():
             print(f"Processed records {index + 1}/{len(lines)}", file=sys.stderr)
             sys.stderr.write("\033[F")
 
-        service.batch_insert(records=records)
+        service.batch_insert_orders(records=records)
 
         # ################################################################### #
         print("\n\n===[TASK 2]===\n", file=sys.stderr)
         # ################################################################### #
-        orders = service.seach_orders_by_date_range(
+        orders = service.search_orders_by_date_range(
             since=datetime.datetime(
                 year=2018,
                 month=11,
@@ -107,10 +107,12 @@ def main():
                 f"Order(id={order.identifier},created='{datetime.datetime.fromtimestamp(order.created)}')",
                 file=sys.stdout,
             )
-
+            
         # ################################################################### #
         print("\n===[TASK 3]===\n", file=sys.stderr)
         # ################################################################### #
+        top_users = service.search_users_with_most_products(limit = 5)
+        print(top_users)
 
     except FileNotFoundError:
         error = (1, f"Could not find {path}")

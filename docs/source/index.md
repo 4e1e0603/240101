@@ -3,12 +3,19 @@
 ```
 
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 3
 :hidden:
+:caption: Overview
 
 solution
 explore
-autoapi/index
+``` 
+
+```{toctree}
+:maxdepth: 3
+:caption: Package 
+
+modules
 ```
 
 ## Resources

@@ -5,34 +5,32 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/a70ed10bc4b949f7a236e67d1ff0287f)](https://app.codacy.com/gh/4e1e0603/230101/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 <p align="center">
-  
   <img src="./snake.png" width=250px />
-
 </p>
 
-## Assignment (cs)
+## Assignment
 
-- Vytvoř třídu `OrderService`, která bude poskytovat následující rozhraní/metody:
-  - Načtení záznamů ze vstupního souboru `orders.jsonl` a jejich uložení do **relační** databáze s vhodným databázovým modelem (cesta k souboru předaná parametrem).
-    - V každém řádku se nachází data objednávek uživatelů.
-    - Atributy uživatelů a produktů se napříč souborem nemění.
-  - Získání objednávek za daný časový úsek (časový úsek předán parametrem).
-  - Získání uživatelů, kteří nakoupili za celou historii nejvíce produktů (počet uživatelů předán parametrem).
+- Create an `OrderService` class that will provide the following interfaces/methods:
+  - Reading records from the orders.jsonl input file and storing them in a relational database with a suitable database model (path to the file passed in parameters).
+    - Each row contains the data of user orders.
+    - User and product attributes do not change across the file.
+  - Obtaining orders for a given time period (time period passed by parameters).
+  - Getting the users who have bought the most products in the entire history (number of users passed as parameters).
 
-Poznámky k implementaci:
+Implementation notes:
 
-- Pro demonstraci kódu není třeba žádné UI ani API. Vše stačí zavolat v main.py souboru a výsledek vypsat na standardní výstup.
-- Důkladný OOP návrh je pro hodnocení klíčový. Dbej na to, aby byl výsledný kód znovupoužitelný a snadno rozšiřitelný.
-- Použij statické typování (<https://docs.python.org/3/library/typing.html>).
-- Testy nejsou povinné, ale kód musí být napsán tak, aby na něj bylo možné testy snadno napsat.
-- Nezapomeň na ošetření vnějších vstupů.
-- Výsledné řešení ulož do veřejného GitHub repozitáře.
+- No UI or API required to demonstrate the code. You just need to call everything in the main.py file and write the result to the standard output.
+- A thorough OO design is key to evaluation. Make sure that the resulting code is reusable and easily extensible.
+- Use static typing (<https://docs.python.org/3/library/typing.html>).
+- Tests are not required, but code must be written in such a way that tests can be easily written on it.
+- Do not forget about the treatment of external inputs.
+- Save the resulting solution to the public GitHub repository.
 
 **Solution** is described in [documentation](https://4e1e0603.github.io/230101/).
 
 ## Usage
 
-A database is created when the script is executed from the package data file, see [src/company/orders/schema.sql](schema.sql). You can also creata schema by hand with a `sqlite3` binary e.g.
+A database is created when the script is executed from the package data file, see [./src/company/orders/schema.sql](schema.sql). You can also creata schema by hand with a `sqlite3` binary e.g.
 
 ```shell
 ./sqlite3 orders.sqlite
@@ -92,11 +90,11 @@ company-orders --data [file_path]
   mypy --show-column-numbers --namespace-packages --explicit-package-bases .
   ```
 
-Sometimes mypy has some obscure errors: <https://notes.jml.io/2021-02-06-15-26/>, e.g:
+  Sometimes mypy has some obscure errors: <https://notes.jml.io/2021-02-06-15-26/>, e.g:
 
-```shell
-src\company\orders\_domain.py: error: Source file found twice under different module names: "src.company.orders._domain" and "company.orders._domain"
-```
+  ```shell
+  src\company\orders\_domain.py: error: Source file found twice under different module names: "src.company.orders._domain" and "company.orders._domain"
+  ```
 
 - Use [`ruff`](https://docs.astral.sh/ruff/) for formating and linting.
 
@@ -122,8 +120,7 @@ src\company\orders\_domain.py: error: Source file found twice under different mo
     python -m pip install -r docs/requirements.txt
     ```
 
-    ```powershell
-    sphinx-build.exe .\source\ .\build\
-    ```
+    I hope you know the rest&hellip;
+
   
 - We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
