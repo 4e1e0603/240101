@@ -2,7 +2,6 @@ import argparse
 import sys
 from pathlib import Path
 import sqlite3 as db
-import json
 
 import datetime
 import logging
@@ -14,6 +13,8 @@ from company.orders import (
     OrderService,
     create_schema,
     delete_schema,
+    ConflictError,
+    ParsingError,
 )
 
 DATABASE_FILE = "orders.sqlite"
@@ -61,69 +62,54 @@ def main():
         logger=LOGGER,
     )
 
-    path = Path(options.data.strip())
-    with open(path, encoding="utf8") as file:
-        lines = file.readlines()
-
     # Exceute commands and handle errors.
-    error = (0, None)  # TODO namedtuple(code, message)
+    error_state = (0, None)  # TODO namedtuple(code, message)
+
     try:
         # ################################################################### #
         print("\n===[TASK 1]===\n", file=sys.stderr)
         # ################################################################### #
-        # We don't use comprehension to catch error for specific line.
-
-        records = []
-        for index, line in enumerate(lines):
-            records.append(json.loads(line))
-            print(f"Processed records {index + 1}/{len(lines)}", file=sys.stderr)
-            sys.stderr.write("\033[F")
-
-        service.batch_insert_orders(records=records)
+        path = Path(options.data.strip())
+        print(f"Import records from file '{path}'...", file=sys.stderr)
+        service.batch_insert_orders(path=path)
+        print("\n===[DONE]===", file=sys.stderr)
 
         # ################################################################### #
         print("\n\n===[TASK 2]===\n", file=sys.stderr)
         # ################################################################### #
-        orders = service.search_orders_by_date_range(
-            since=datetime.datetime(
-                year=2018,
-                month=11,
-                day=16,
-                hour=1,
-                minute=29,
-                second=4,  # an example taken from dataset
-            ),
-            till=datetime.datetime(
-                year=2018,
-                month=11,
-                day=20,
-                hour=10,
-                minute=45,
-                second=30,  # an example taken from dataset
-            ),
-        )
+        date1 = datetime.datetime(2018, 11, 16, 1, 29, 4)
+        date2 = datetime.datetime(2018, 11, 16, 10, 45, 30)
+        print(f"Select orders between {date1} and {date2}...\n", file=sys.stderr)
+        orders = service.search_orders_by_date_range(since=date1, till=date2)
         for order in orders:
             print(
                 f"Order(id={order.identifier},created='{datetime.datetime.fromtimestamp(order.created)}')",
                 file=sys.stdout,
             )
+        print("\n===[DONE]===", file=sys.stderr)
 
         # ################################################################### #
         print("\n===[TASK 3]===\n", file=sys.stderr)
         # ################################################################### #
-        top_users = service.search_users_with_most_products(limit=5)
-        print(top_users)
+        limit = 5
+        print("Select top {limit} users with most prodcuts...\n", file=sys.stderr)
+        top_users = service.search_users_with_most_products(limit=limit)
+        for user in top_users:
+            print(user)
+        print("\n===[DONE]===", file=sys.stderr)
 
     except FileNotFoundError:
-        error = (1, f"Could not find {path}")
-    except ValueError:  # JsonError
-        error = (2, f"Could not parse '{line}'")
+        error_state = (1, f"Could not find file {path}")
+    except ParsingError as error:
+        error_state = (2, f"Could not parse record {error}")
+    except ConflictError as error:
+        error_state = (3, f"Record already exists {error}")
     except KeyboardInterrupt:
-        error = (3, "Interrupted by user")
+        error_state = (4, "Process exited by user")
 
-    if error[0] == 0:
-        print("--SUCCESS--")
+    if error_state[0] == 0:
+        print("\n--SUCCESS--")
     else:
-        print(f"FAILURE {error[1]}", file=sys.stderr)
+        print(f"\nFAILURE {error_state[0]}: {error_state[1]}", file=sys.stderr)
 
-    sys.exit(error[0])
+    sys.exit(error_state[0])

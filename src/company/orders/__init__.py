@@ -10,6 +10,8 @@ __all__ = [
     "OrderRepository",
     "ProductRepository",
     "UserRepository",
+    "ParsingError",
+    "ConflictError",
 ]
 
 from company.orders._domain import User as User, Order as Order, Product as Product
@@ -20,6 +22,8 @@ from company.orders._storage import (
     OrderRepository as OrderRepository,
     create_schema as create_schema,
     delete_schema as delete_schema,
+    ConflictError as ConflictError,
 )
+from company.orders._shared import ParsingError as ParsingError
 
 # ^^^^ Reimports: aliases are the trick to keep linters (Pylance) calm about unused imports.

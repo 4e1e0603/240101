@@ -21,6 +21,7 @@ __all__ = [
     "Identifiable",
     "flatten",
     "inform",
+    "ParsingError",
 ]
 
 
@@ -39,7 +40,7 @@ def flatten(xss: list[list[Any]]) -> list[Any]:
     return [x for xs in xss for x in xs]
 
 
-class JsonError(ValueError):
+class ParsingError(ValueError):
     """
     The exception raised when parsing JSON from text.
     Has better semantics then `` ValueError`` raise by :mod:`json`.

@@ -55,7 +55,6 @@ def order_service():
 
 
 def test_order_service_method1(order_service):
-
     return NotImplemented
 
 

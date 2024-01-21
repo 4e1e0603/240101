@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Iterable, Iterator, TypeAlias
 from collections import Counter
 import datetime
+import json
 
 from company.orders._domain import (
     User,
@@ -19,7 +20,7 @@ from company.orders._domain import (
     ProductRepository,
     OrderRepository,
 )
-from company.orders._shared import DateTimeRange, inform
+from company.orders._shared import DateTimeRange, inform, ParsingError
 from company.orders._storage import ConflictError
 
 
@@ -64,15 +65,17 @@ class OrderService:
         Search users which purchased most products in descending order.
 
         :param limit: The limit how much users to return.
-        :returns: the users with most purchased products. 
+        :returns: the users with most purchased products.
         """
         # This works, but probably should be implemented another way.
-        # We reuse the connection from reposiotry class which is not very clean.
+        # We reuse the connection from repository class which is not very clean.
         # But where to place code (e.g. in which repositories) which spans multiple aggregates?
         # For performance reasons, this is a good solution, but from architectural point of view, not so.
+        # BUT IT WORKS!
         con = self._user_repository.connection
         with con as cursor:
-            found = cursor.execute("""       
+            found = cursor.execute(
+                """       
                 select orders.user_id, users.name, users.city, sum(order_lines.quantity) 
                 from orders 
                 join order_lines on order_lines.order_id = orders.id 
@@ -80,31 +83,48 @@ class OrderService:
                 group by orders.user_id 
                 order by sum(order_lines.quantity) 
                 desc 
-                limit 3;
-            """, (limit,),
+                limit ?;
+            """,
+                (limit,),
             ).fetchall()
-
             for item in found:
-                yield item
-
+                yield User(*item[:-1])
 
     # ############################## Commands ############################# #
 
-    def batch_insert_orders(self, records: Iterable[JSON] | Path) -> None:
+    def _parse_records(self, path) -> Iterator[JSON]:
+        """
+        The helper method to read and parse records from provided JSONLine data file.
+        This method can be easily  mocked for unit testing.
+
+        :param path: A data file to be parsed.
+        :raises :class:`ParsingError`: when data can't be parsed as JSON.
+        """
+        with open(path, encoding="utf8") as file:
+            lines = file.readlines()
+        for index, line in enumerate(lines):
+            try:
+                yield json.loads(line)
+            except ValueError as error:
+                raise ParsingError(line) from error
+
+    def batch_insert_orders(self, path: Path) -> None:
         """
         A batch insert from provided JSON-line dataset.
 
-        :param records: The records to be parsed.
-        :raises: :class:`ConflictError`: when an order already exists.
+        :param path: A data file to be parsed.
+        :raises:
+            :class:`ParsingError`: when data can't be parsed as JSON.
+            :class:`ConflictError`: when an order already exists in database.
         """
-        # NOTE This should probably be a transactional with rollback if something goes wrong.
-        # We can use a Unit of Work pattern / context manager.
-        # We trust that attributes for products and users does not change over dataset.
-        # It should be true for provided dataset, but don't trust the input!
-
-        # Parse entities from raw data.
+        # Parse domain entities fro raw data.
         orders: list[Order] = []
-        for record in records:
+
+        # NOTE Database writes should be transactional with rollback if something goes wrong.
+        # We can use a unit of work pattern / context manager but we keep it simple for now.
+        # We trust that attributes such as price for products does not change over dataset.
+        # It should be true for provided dataset, but don't trust the input!
+        for record in self._parse_records(path):
             # [1] Extract and save a new user.
             user = User(
                 record["user"]["id"],
