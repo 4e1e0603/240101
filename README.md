@@ -10,12 +10,12 @@
 
 ## Assignment
 
-- Create an `OrderService` class that will provide the following interfaces/methods:
-  - Reading records from the orders.jsonl input file and storing them in a relational database with a suitable database model (path to the file passed in parameters).
-    - Each row contains the data of user orders.
-    - User and product attributes do not change across the file.
-  - Obtaining orders for a given time period (time period passed by parameters).
-  - Getting the users who have bought the most products in the entire history (number of users passed as parameters).
+Create an `OrderService` class that will provide the following interfaces/methods:
+1. Reading records from the `orders.jsonl` file and storing them in a relational database with a suitable database model (path to the file passed in parameters).
+    1. Each row contains the data of user orders.
+    2. User and product attributes do not change across the file.
+2. Obtaining orders for a given time period (time period passed by parameters).
+3. Getting the users who have bought the most products in the entire history (number of users passed as parameters).
 
 Implementation notes:
 
