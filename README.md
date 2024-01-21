@@ -48,22 +48,52 @@ The console output should look like this:
 ```powershell
 ===[TASK 1]===
 
-Processed records 5000/5000
+Import records from file 'orders.jsonl'...
+
+===[DONE]===
+
 
 ===[TASK 2]===
 
-Order(id=15,created='2018-11-16 14:09:34')
-Order(id=31,created='2018-11-18 16:50:38')
-Order(id=56,created='2018-11-18 00:40:23')
-Order(id=67,created='2018-11-19 06:55:10')
+Select orders between 2018-11-16 01:29:04 and 2018-11-16 10:45:30...
+
 Order(id=75,created='2018-11-16 03:52:51')
-Order(id=81,created='2018-11-17 18:02:58')
-Order(id=97,created='2018-11-20 01:47:55')
-...
+Order(id=124,created='2018-11-16 04:34:02')
+Order(id=431,created='2018-11-16 10:48:18')
+Order(id=579,created='2018-11-16 05:46:49')
+Order(id=686,created='2018-11-16 04:23:26')
+Order(id=865,created='2018-11-16 09:45:41')
+Order(id=1232,created='2018-11-16 02:42:20')
+Order(id=1307,created='2018-11-16 05:43:19')
+Order(id=1451,created='2018-11-16 03:42:03')
+Order(id=1464,created='2018-11-16 05:34:18')
+Order(id=1688,created='2018-11-16 09:40:15')
+Order(id=1706,created='2018-11-16 09:45:34')
+Order(id=1880,created='2018-11-16 09:31:12')
+Order(id=1890,created='2018-11-16 02:39:49')
+Order(id=2171,created='2018-11-16 02:53:52')
+Order(id=2245,created='2018-11-16 07:39:23')
+Order(id=2409,created='2018-11-16 05:04:44')
+Order(id=2665,created='2018-11-16 07:33:48')
+Order(id=2667,created='2018-11-16 05:43:33')
+Order(id=3069,created='2018-11-16 08:56:50')
+Order(id=3085,created='2018-11-16 11:43:14')
+Order(id=3166,created='2018-11-16 08:32:41')
+Order(id=3620,created='2018-11-16 06:26:43')
+Order(id=3650,created='2018-11-16 06:33:00')
+Order(id=3897,created='2018-11-16 09:46:00')
+Order(id=4083,created='2018-11-16 10:18:56')
+Order(id=4105,created='2018-11-16 11:09:50')
+Order(id=4106,created='2018-11-16 04:50:03')
+Order(id=4135,created='2018-11-16 07:47:09')
+Order(id=4519,created='2018-11-16 03:21:35')
 Order(id=4995,created='2018-11-16 04:47:57')
-Order(id=4999,created='2018-11-17 23:29:51')
+
+===[DONE]===
 
 ===[TASK 3]===
+
+Select top {limit} users with most prodcuts...
 
 User(city=Singapore,identifier=2,name=User C)
 User(city=Melbourne,identifier=4,name=User E)
@@ -71,7 +101,19 @@ User(city=Prague,identifier=0,name=User A)
 User(city=Hong Kong,identifier=6,name=User G)
 User(city=Kuala Lumpur,identifier=7,name=User H)
 
+===[DONE]===
+
 --SUCCESS--
+```
+
+or with some error state:
+
+```powershell
+===[TASK 1]===
+
+Import records from file 'orders.jsonl'...
+
+FAILURE 2: Could not parse record [...]
 ```
 
 ## Installation
