@@ -20,7 +20,7 @@ from company.orders._domain import (
     ProductRepository,
     OrderRepository,
 )
-from company.orders._shared import DateTimeRange, inform, ParsingError
+from company.orders._basis import DateTimeRange, inform, ParsingError
 from company.orders._storage import ConflictError
 
 

@@ -20,7 +20,7 @@ from dataclasses import dataclass
 from typing import TypeAlias, Iterable, Self, Iterator
 from datetime import datetime
 
-from company.orders._shared import Entity, Timestamp, Repository
+from company.orders._basis import Entity, Timestamp, Repository
 
 
 class DomainError(Exception):
@@ -36,7 +36,7 @@ UserID: TypeAlias = int
 
 class User(Entity[UserID]):
     """
-    The custommer domain model.
+    The user domain model.
     """
 
     def __init__(self, identifier: int, name: str, city: str) -> None:
@@ -157,7 +157,7 @@ class Order(Entity[OrderID]):
 
     Contains 1 user and 1..N order lines.
 
-    ..note: You can probably change products (insert, remove) or
+    .. note: You can probably change products (insert, remove) or
     assign the order to a different user. You cannot change `id` and
     `created` attributes. Can the order have a 0 products?
     """

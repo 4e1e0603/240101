@@ -24,6 +24,6 @@ from company.orders._storage import (
     delete_schema as delete_schema,
     ConflictError as ConflictError,
 )
-from company.orders._shared import ParsingError as ParsingError
+from company.orders._basis import ParsingError as ParsingError
 
 # ^^^^ Reimports: aliases are the trick to keep linters (Pylance) calm about unused imports.

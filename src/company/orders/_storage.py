@@ -6,7 +6,7 @@ of repositories for each aggregate. This is a infrastructure persistence layer.
 from typing import Iterator
 
 from company.orders._domain import User, Order, Product, OrderLine
-from company.orders._shared import AbstractRepository, flatten, Timestamp
+from company.orders._basis import AbstractRepository, flatten, Timestamp
 
 
 __all__ = [
