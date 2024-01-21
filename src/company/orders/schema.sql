@@ -21,21 +21,21 @@ INSERT INTO VERSION (major, minor, patch) VALUES (0, 1, 0);
 
 -- The users of our application placing the orders. 
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY key NOT NULL,
+    id INTEGER PRIMARY KEY NOT NULL,
     name text NOT NULL CHECK(name <> ''),
     city text NOT NULL CHECK(name <> '')
 );
 
 -- The products ordered by our users.
 CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY key NOT NULL,
+    id INTEGER PRIMARY KEY NOT NULL,
     name text NOT NULL CHECK(name <> ''),
     price INTEGER NOT NULL CHECK(price >= 0)
 );
 
 -- The orders purchased by our users.
 CREATE TABLE IF NOT EXISTS orders (
-    id INTEGER PRIMARY key NOT NULL,
+    id INTEGER PRIMARY KEY NOT NULL,
     user_id INTEGER NOT NULL,
     created TIMESTAMP(10) NOT NULL,
     CONSTRAINT fk_users FOREIGN key(user_id) REFERENCES users(id)
