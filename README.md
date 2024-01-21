@@ -37,10 +37,41 @@ A database is created when the script is executed from the package data file, se
 sqlite> .read path/to/schema.sql
 ```
 
-The package contains simple command line interface
+The package contains simple command line interface for functionality demonstration.
 
 ```shell
-company-orders --data [file_path]
+company-orders --data [file_path] [--verbose]
+```
+
+The console output should look like this:
+
+```powershell
+===[TASK 1]===
+
+Processed records 5000/5000
+
+===[TASK 2]===
+
+Order(id=15,created='2018-11-16 14:09:34')
+Order(id=31,created='2018-11-18 16:50:38')
+Order(id=56,created='2018-11-18 00:40:23')
+Order(id=67,created='2018-11-19 06:55:10')
+Order(id=75,created='2018-11-16 03:52:51')
+Order(id=81,created='2018-11-17 18:02:58')
+Order(id=97,created='2018-11-20 01:47:55')
+...
+Order(id=4995,created='2018-11-16 04:47:57')
+Order(id=4999,created='2018-11-17 23:29:51')
+
+===[TASK 3]===
+
+User(city=Singapore,identifier=2,name=User C)
+User(city=Melbourne,identifier=4,name=User E)
+User(city=Prague,identifier=0,name=User A)
+User(city=Hong Kong,identifier=6,name=User G)
+User(city=Kuala Lumpur,identifier=7,name=User H)
+
+--SUCCESS--
 ```
 
 ## Installation
