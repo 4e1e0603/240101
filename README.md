@@ -11,6 +11,7 @@
 ## Assignment
 
 Create an `OrderService` class that will provide the following interfaces/methods:
+
 1. Reading records from the `orders.jsonl` file and storing them in a relational database with a suitable database model (path to the file passed in parameters).
     1. Each row contains the data of user orders.
     2. User and product attributes do not change across the file.
@@ -30,7 +31,7 @@ Implementation notes:
 
 ## Usage
 
-A database is created when the script is executed from the package data file, see [./src/company/orders/schema.sql](schema.sql). You can also creata schema by hand with a `sqlite3` binary e.g.
+A database is created when the script is executed from the package data file, see [https://github.com/4e1e0603/230101/blob/main/src/company/orders/schema.sql](schema.sql). You can also creata schema by hand with a `sqlite3` binary e.g.
 
 ```shell
 ./sqlite3 orders.sqlite
@@ -195,5 +196,4 @@ FAILURE 2: Could not parse record [...]
 
     I hope you know the rest&hellip;
 
-  
 - We use [`setuptools-scm`](https://setuptools-scm.readthedocs.io/en/latest/) to manage package version.
