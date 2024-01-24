@@ -21,12 +21,15 @@ __all__ = [
     "Identifiable",
     "flatten",
     "inform",
-    "ParsingError",
+    "JSONError",
 ]
 
 
 def inform(logger, message) -> None:
-    """Print the message when the logger is provided, otherwise skip."""
+    """Print the info message when the logger is provided, otherwise skip.
+    :param: The logger instance.
+    :param: The message to print.
+    """
     if logger is not None:
         logger.info(message)
 
@@ -35,15 +38,25 @@ def flatten(xss: list[list[Any]]) -> list[Any]:
     """Flatten the given list.
 
     :param xss: The list of lists.
-    :return: the flattended list of items.
+    :return: the flattened list of items.
     """
     return [x for xs in xss for x in xs]
 
 
-class ParsingError(ValueError):
+class JSONError(ValueError):
     """
     The exception raised when parsing JSON from text.
-    Has better semantics then `` ValueError`` raise by :mod:`json`.
+    Has better semantics then :class:`ValueError` raise by :mod:`json`.
+
+    Usage:
+
+    .. code-block:: python
+
+        try:
+            json.dumps
+        except ValueError as error:
+            raise JSONError from error
+
     """
 
 

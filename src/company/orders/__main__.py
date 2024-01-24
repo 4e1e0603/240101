@@ -14,7 +14,7 @@ from company.orders import (
     create_schema,
     delete_schema,
     ConflictError,
-    ParsingError,
+    JSONError,
 )
 
 DATABASE_FILE = "orders.sqlite"
@@ -100,7 +100,7 @@ def main():
 
     except FileNotFoundError:
         error_state = (1, f"Could not find file {path}")
-    except ParsingError as error:
+    except JSONError as error:
         error_state = (2, f"Could not parse record {error}")
     except ConflictError as error:
         error_state = (3, f"Record already exists {error}")

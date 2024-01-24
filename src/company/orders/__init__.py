@@ -10,7 +10,7 @@ __all__ = [
     "OrderRepository",
     "ProductRepository",
     "UserRepository",
-    "ParsingError",
+    "JSONError",
     "ConflictError",
 ]
 
@@ -24,6 +24,6 @@ from company.orders._storage import (
     delete_schema as delete_schema,
     ConflictError as ConflictError,
 )
-from company.orders._basis import ParsingError as ParsingError
+from company.orders._basis import JSONError as JSONError
 
 # ^^^^ Reimports: aliases are the trick to keep linters (Pylance) calm about unused imports.

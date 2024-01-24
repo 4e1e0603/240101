@@ -20,7 +20,7 @@ from company.orders._domain import (
     ProductRepository,
     OrderRepository,
 )
-from company.orders._basis import DateTimeRange, inform, ParsingError
+from company.orders._basis import DateTimeRange, inform, JSONError
 from company.orders._storage import ConflictError
 
 
@@ -98,7 +98,7 @@ class OrderService:
         This method can be easily  mocked for unit testing.
 
         :param path: A data file to be parsed.
-        :raises :class:`ParsingError`: when data can't be parsed as JSON.
+        :raises :class:`JSONError`: when data can't be parsed as JSON.
         """
         with open(path, encoding="utf8") as file:
             lines = file.readlines()
@@ -106,7 +106,7 @@ class OrderService:
             try:
                 yield json.loads(line)
             except ValueError as error:
-                raise ParsingError(line) from error
+                raise JSONError(line) from error
 
     def batch_insert_orders(self, path: Path) -> None:
         """
@@ -114,7 +114,7 @@ class OrderService:
 
         :param path: A data file to be parsed.
         :raises:
-            :class:`ParsingError`: when data can't be parsed as JSON.
+            :class:`JSONError`: when data can't be parsed as JSON.
             :class:`ConflictError`: when an order already exists in database.
         """
         # Parse domain entities fro raw data.
