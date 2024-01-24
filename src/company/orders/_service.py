@@ -51,7 +51,7 @@ class OrderService:
 
     # ############################## Queries ############################## #
 
-    def search_orders_by_date_range(
+    def search_orders_by_date(
         self, since: datetime.datetime, till: datetime.datetime
     ) -> Iterator[Order]:
         """TODO"""

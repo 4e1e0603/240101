@@ -82,7 +82,7 @@ def main():
         date1 = datetime.datetime(2018, 11, 16, 1, 29, 4)
         date2 = datetime.datetime(2018, 11, 16, 10, 45, 30)
         print(f"Select orders between {date1} and {date2}...\n", file=sys.stderr)
-        orders = service.search_orders_by_date_range(since=date1, till=date2)
+        orders = service.search_orders_by_date(since=date1, till=date2)
         for order in orders:
             print(
                 f"Order(id={order.identifier},created='{datetime.datetime.fromtimestamp(order.created)}')",
