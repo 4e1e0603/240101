@@ -95,7 +95,7 @@ def main():
         # ################################################################### #
         limit = 5
         print("Select top {limit} users with most prodcuts...\n", file=sys.stderr)
-        top_users = service.search_users_with_most_products(limit=limit)
+        top_users = service.search_users_with_most_products(connection, limit=limit)
         for user in top_users:
             print(user)
         print("\n===[DONE]===", file=sys.stderr)

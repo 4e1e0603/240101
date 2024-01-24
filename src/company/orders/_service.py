@@ -62,20 +62,14 @@ class OrderService:
         )
         yield from result
 
-    def search_users_with_most_products(self, limit=3) -> Iterable[User]:
+    def search_users_with_most_products(self, connection, limit=3) -> Iterable[User]:
         """
-        Search users which purchased most products in descending order.
+        Retrieve users with the highest number of purchased products in descending order.
 
-        :param limit: The limit how much users to return.
-        :returns: the users with most purchased products.
+        :param limit: The maximum of users to return.
+        :returns: The users with the highest number of purchased products.
         """
-        # This works, but probably should be implemented another way.
-        # We reuse the connection from repository class which is not very clean.
-        # But where to place code (e.g. in which repositories) which spans multiple aggregates?
-        # For performance reasons, this is a good solution, but from architectural point of view, not so.
-        # BUT IT WORKS!
-        con = self._user_repository.connection
-        with con as cursor:
+        with connection as cursor:
             found = cursor.execute(
                 """       
                 select orders.user_id, users.name, users.city, sum(order_lines.quantity) 
