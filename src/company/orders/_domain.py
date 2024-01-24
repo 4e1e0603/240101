@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from typing import TypeAlias, Iterable, Self, Iterator
 from datetime import datetime
 
-from company.orders._common import Entity, Timestamp, Repository, Event
+from company.orders._common import Entity, Timestamp, Repository, Event, DomainError
 
 
 # ########################################################################### #
@@ -120,7 +120,7 @@ class Product(Entity[ProductID]):
         return self._name
 
     @property
-    def price(self) -> str:
+    def price(self) -> int:
         """
         :returns: a product's price.
         """
@@ -214,14 +214,11 @@ class Order(Entity[OrderID]):
         The factory function returns the entity or error i.e. it does not raise.
         """
         try:
-            result = cls(
+            return cls(
                 identifier=id, created=created, user_id=user_id, order_lines=order_lines
             )
         except Exception as error:
-            print(error, "--------------------")
-            result = error
-        finally:
-            return result
+            return DomainError(f"{error}")
 
 
 class OrderRepository(Repository[Order]):

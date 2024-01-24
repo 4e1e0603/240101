@@ -20,7 +20,7 @@ from company.orders._domain import (
     Product,
     ProductRepository,
 )
-from company.orders._common import DateTimeRange, inform, JSONError, JSON
+from company.orders._common import DateTimeRange, inform, JSONError, Any
 from company.orders._storage import ConflictError
 
 
@@ -87,7 +87,7 @@ class OrderService:
 
     # ############################## Commands ############################# #
 
-    def _parse_records(self, path) -> Iterator[JSON]:
+    def _parse_records(self, path) -> Iterator[Any]:  # better to use TypedDict for JSON
         """
         The helper method to read and parse records from provided JSONLine data file.
         This method can be easily  mocked for unit testing.
@@ -122,7 +122,7 @@ class OrderService:
         for record in self._parse_records(path):
             # [1] Extract and save a new user.
             user = User(
-                record["user"]["id"],
+                identifier=int(record["user"]["id"]),
                 name=record["user"]["name"],
                 city=record["user"]["city"],
             )
@@ -134,7 +134,7 @@ class OrderService:
             products = []
             for product_record in record["products"]:
                 product = Product(
-                    product_record["id"],
+                    identifier=int(product_record["id"]),
                     name=product_record["name"],
                     price=product_record["price"],
                 )
@@ -149,7 +149,7 @@ class OrderService:
                 for product, quantity in Counter(products).items()
             ]
             order = Order(
-                record["id"],
+                identifier=int(record["id"]),
                 created=record["created"],
                 user_id=user.identifier,
                 order_lines=order_lines,

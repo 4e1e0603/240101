@@ -94,10 +94,13 @@ class DateTimeRange:
 class Name:
     value: str
 
-    def __post_init(self) -> None:
-        if self.value == "":
-            raise ValueError("Empty string is not allowed")
+    def __post_init__(self) -> None:
+        if 0 == len(self.value):  # Yoda
+            raise ValueError("Empty name is not allowed")
 
+
+#                               Aggregates                                  #
+# ######################################################################### #
 
 Timestamp: TypeAlias = float
 """The (Unix) timestamp alias for primitive float value."""
@@ -110,9 +113,13 @@ Identifier = TypeVar("Identifier")
 
 
 class Identifiable(Protocol, Generic[Identifier]):
+    """
+    Represents an entity with identifier.
+    """
+
     @property
     def identifier(self) -> Identifier:
-        """The entitiy unique identifier."""
+        """The entitie's unique identifier."""
 
 
 class Entity(ABC, Generic[Identifier]):
@@ -152,6 +159,9 @@ class Entity(ABC, Generic[Identifier]):
 
 
 EntityType = TypeVar("EntityType", bound=Entity)
+
+#                                Persistence                                #
+# ######################################################################### #
 
 
 class Repository(Generic[EntityType], Protocol):
@@ -238,6 +248,10 @@ class AbstractRepository(ABC, Generic[EntityType]):
         """
 
 
+#                                Messaging                                  #
+# ######################################################################### #
+
+
 @dataclass(frozen=True, slots=True)
 class Event:
     pass
@@ -246,6 +260,10 @@ class Event:
 @dataclass(frozen=True, slots=True)
 class Command:
     pass
+
+
+#                                Exceptions                                 #
+# ######################################################################### #
 
 
 class DomainError(Exception):

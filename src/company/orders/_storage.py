@@ -157,10 +157,3 @@ class OrderRepository(AbstractRepository[Order]):
                     ],
                 )
                 yield order
-
-        def find_users_(self, limit=10) -> Iterator[User]:
-            statement = """
-            select orders.user_id, sum(order_lines.quantity) from orders join order_lines on order_lines.order_id = orders.id group by orders.user_id order by sum(order_lines.quantity) desc limit = ?;
-            """
-            with self.connection as cursor:
-                cursor.execute(statement, (limit,)).fetchall()
