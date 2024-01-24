@@ -1,5 +1,5 @@
-"""
-This module contains a shared code and general abstractions.
+"""This module contains code shared between modules and packages.
+This can be reused between projects in the future.
 """
 
 # mypy: disable-error-code=empty-body
@@ -22,6 +22,8 @@ __all__ = [
     "flatten",
     "inform",
     "JSONError",
+    "Event",
+    "Command",
 ]
 
 
@@ -215,11 +217,10 @@ class AbstractRepository(ABC, Generic[EntityType]):
         aggregate,
     ) -> EntityType | None:
         """
-        Find the unique entity matching the predicate.
+        Find a aggregate root entity matching the predicate.
 
         The predicate must match exactly one or zero entity.
 
-        :param aggregate: The entity to find.
         :param aggregate: The entity to find.
         :returns: The found entity or `None`.
         """
@@ -227,8 +228,24 @@ class AbstractRepository(ABC, Generic[EntityType]):
     @abstractmethod
     def exists(self, aggregate) -> bool:
         """
-        Check if aggregate  root entity exists in storage.
+        Check if aggregate root entity exists in the storage.
 
         :param aggregate: The entity to find.
         :returns: The `True` if found, otherwise `False`.
         """
+
+
+@dataclass(frozen=True, slots=True)
+class Event:
+    pass
+
+
+@dataclass(frozen=True, slots=True)
+class Command:
+    pass
+
+
+class DomainError(Exception):
+    """
+    Represents an exception raised in domain layer.
+    """

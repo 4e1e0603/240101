@@ -13,14 +13,14 @@ import json
 
 from company.orders._domain import (
     User,
+    UserRepository,
     Order,
     OrderLine,
-    Product,
-    UserRepository,
-    ProductRepository,
     OrderRepository,
+    Product,
+    ProductRepository,
 )
-from company.orders._basis import DateTimeRange, inform, JSONError
+from company.orders._common import DateTimeRange, inform, JSONError
 from company.orders._storage import ConflictError
 
 
@@ -34,6 +34,8 @@ class OrderService:
     :param user_repository: The user repository instance.
     :param order_repository: The order repository instance.
     :param product_repository: The product repository instance.
+
+    TODO Send events to message dispatcher (bus).
     """
 
     def __init__(

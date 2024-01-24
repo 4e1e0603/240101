@@ -7,12 +7,15 @@ one is of course IT, the other is the illegal drugs trade…” — Edward Tufte
 
 __all__ = [
     "User",
-    "Order",
-    "Product",
+    "UserID",
     "UserRepository",
+    "Order",
+    "OrderID",
     "OrderRepository",
+    "OrderPlaced",
+    "Product",
+    "ProductID",
     "ProductRepository",
-    "DomainError",
 ]
 
 
@@ -20,13 +23,7 @@ from dataclasses import dataclass
 from typing import TypeAlias, Iterable, Self, Iterator
 from datetime import datetime
 
-from company.orders._basis import Entity, Timestamp, Repository
-
-
-class DomainError(Exception):
-    """
-    Represents an exception raised in domain layer.
-    """
+from company.orders._common import Entity, Timestamp, Repository, Event
 
 
 # ########################################################################### #
@@ -36,7 +33,7 @@ UserID: TypeAlias = int
 
 class User(Entity[UserID]):
     """
-    The user domain model.
+    The user aggregate entity.
     """
 
     def __init__(self, identifier: int, name: str, city: str) -> None:
@@ -97,7 +94,7 @@ ProductID: TypeAlias = int
 
 class Product(Entity[ProductID]):
     """
-    The product domain model.
+    The product aggregate entity.
 
     The price should be of some special `Money` or `Decimal` type.
     Never ever use floats!
@@ -150,10 +147,14 @@ class OrderLine:
     product_id: ProductID
     quantity: int = 1
 
+    def __post_init__(self) -> None:
+        if self.quantity <= 0:
+            raise ValueError("Quantity must be greater then zero")
+
 
 class Order(Entity[OrderID]):
     """
-    The order domain model.
+    The order aggregate entity.
 
     Contains 1 user and 1..N order lines.
 
@@ -200,19 +201,27 @@ class Order(Entity[OrderID]):
     def has_same_products(self, other: Self) -> bool:
         return self._products == other._products
 
-    # TODO Future work
-    # @classmethod
-    # def create(
-    #     cls: Type[Self],
-    #     id: OrderID,
-    #     user: UserID,
-    #     created: datetime | Timestamp,
-    #     products: ProductID
-    #     ) -> Type[Self]:
-    #     """
-    #     Create a new order with this factory method instead of initializer.
-    #     """
-    #     return cls(identifier=id, created = created, user=user, *products)
+    @classmethod
+    def create(
+        cls,
+        id: OrderID,
+        user_id: UserID,
+        order_lines: Iterable[OrderLine],
+        created: datetime | Timestamp,
+    ) -> Self | Exception:
+        """
+        Create a new order with this factory method instead of initializer.
+        The factory function returns the entity or error i.e. it does not raise.
+        """
+        try:
+            result = cls(
+                identifier=id, created=created, user_id=user_id, order_lines=order_lines
+            )
+        except Exception as error:
+            print(error, "--------------------")
+            result = error
+        finally:
+            return result
 
 
 class OrderRepository(Repository[Order]):
@@ -229,3 +238,10 @@ class OrderRepository(Repository[Order]):
         :returns: ...
         """
         return NotImplemented
+
+
+@dataclass(frozen=True, slots=True)
+class OrderPlaced(Event):
+    order_id: OrderID
+    created: Timestamp
+    order_lines: Iterable[OrderLine]

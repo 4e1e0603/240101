@@ -11,13 +11,15 @@ from company.orders import (
     ProductRepository,
     OrderRepository,
     OrderService,
-    create_schema,
-    delete_schema,
     ConflictError,
     JSONError,
+    delete_schema,
+    create_schema,
 )
 
+
 DATABASE_FILE = "orders.sqlite"
+# This should be in some configuration file/object for production usage.
 
 
 def main():
@@ -106,6 +108,8 @@ def main():
         error_state = (3, f"Record already exists {error}")
     except KeyboardInterrupt:
         error_state = (4, "Process exited by user")
+
+    # TODO Catch other domain errors such as negative product price (ValueError/DomainError).
 
     if error_state[0] == 0:
         print("\n--SUCCESS--")

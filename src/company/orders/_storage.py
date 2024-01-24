@@ -1,12 +1,12 @@
 """
 This module contains database related code such as implementation 
-of repositories for each aggregate. This is a infrastructure persistence layer.
+of repositories for each aggregate. This is a infrastructure (persistence) layer.
 """
 
 from typing import Iterator
 
 from company.orders._domain import User, Order, Product, OrderLine
-from company.orders._basis import AbstractRepository, flatten, Timestamp
+from company.orders._common import AbstractRepository, flatten, Timestamp
 
 
 __all__ = [
