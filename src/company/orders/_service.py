@@ -25,8 +25,10 @@ from company.orders._storage import ConflictError
 
 
 class OrderService:
-    """The order service contains methods (use-cases) for ordering of products by users (customers).
-    The class acts as an application facade.
+    """
+    The order service contains methods for ordering products from customers. 
+    The :class:`OrderService` acts as an application facade, where each public 
+    method represents a use case defined by business requirements.
 
     :param user_repository: The user repository instance.
     :param order_repository: The order repository instance.
