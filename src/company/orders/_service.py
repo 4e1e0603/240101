@@ -101,7 +101,7 @@ class OrderService:
             try:
                 yield json.loads(line)
             except ValueError as error:
-                raise JSONError(line) from error
+                raise JSONError(f"{index}: {line}") from error
 
     def batch_insert_orders(self, path: Path) -> None:
         """
