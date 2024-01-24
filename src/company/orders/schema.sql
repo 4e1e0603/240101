@@ -47,6 +47,6 @@ CREATE TABLE IF NOT EXISTS order_lines (
     product_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT fk_orders FOREIGN key(order_id) REFERENCES orders(id) ON DELETE cascade,
-    CONSTRAINT fk_products FOREIGN key(product_id) REFERENCES products(id) ON DELETE cascade
+    CONSTRAINT fk_products FOREIGN key(product_id) REFERENCES products(id) ON DELETE cascade,
     CONSTRAINT pk_order_lines PRIMARY KEY (order_id, product_id)
 );
