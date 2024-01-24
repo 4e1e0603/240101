@@ -62,4 +62,3 @@ def test_order_service_method1(order_service):
 @pytest.mark.skip
 def test_order_service_method2(order_service):
     return NotImplemented
-    

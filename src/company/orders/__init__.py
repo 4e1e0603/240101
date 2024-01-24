@@ -5,13 +5,18 @@ The order service module.
 __all__ = [
     "OrderService",
     "Order",
+    "OrderID",
     "Product",
+    "ProductID",
     "User",
+    "UserID",
     "OrderRepository",
     "ProductRepository",
     "UserRepository",
     "JSONError",
     "ConflictError",
+    "create_schema",
+    "delete_schema",
 ]
 
 from company.orders._domain import (
