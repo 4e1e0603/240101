@@ -24,7 +24,10 @@ __all__ = [
     "JSONError",
     "Event",
     "Command",
+    "JSON",
 ]
+
+JSON: TypeAlias = str
 
 
 def inform(logger, message) -> None:

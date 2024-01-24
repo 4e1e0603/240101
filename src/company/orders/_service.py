@@ -6,7 +6,7 @@ __all__ = ["OrderService"]
 
 
 from pathlib import Path
-from typing import Iterable, Iterator, TypeAlias
+from typing import Iterable, Iterator
 from collections import Counter
 import datetime
 import json
@@ -20,11 +20,8 @@ from company.orders._domain import (
     Product,
     ProductRepository,
 )
-from company.orders._common import DateTimeRange, inform, JSONError
+from company.orders._common import DateTimeRange, inform, JSONError, JSON
 from company.orders._storage import ConflictError
-
-
-JSON: TypeAlias = str
 
 
 class OrderService:
