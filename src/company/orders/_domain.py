@@ -204,7 +204,7 @@ class Order(Entity[OrderID]):
     @classmethod
     def create(
         cls,
-        id: OrderID,
+        order_id: OrderID,
         user_id: UserID,
         order_lines: Iterable[OrderLine],
         created: datetime | Timestamp,
@@ -215,7 +215,10 @@ class Order(Entity[OrderID]):
         """
         try:
             return cls(
-                identifier=id, created=created, user_id=user_id, order_lines=order_lines
+                identifier=order_id,
+                created=created,
+                user_id=user_id,
+                order_lines=order_lines,
             )
         except Exception as error:
             return DomainError(f"{error}")
