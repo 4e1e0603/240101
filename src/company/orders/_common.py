@@ -109,7 +109,8 @@ Timestamp: TypeAlias = float
 
 
 Identifier = TypeVar("Identifier")
-"""The identifier that is unique per aggregates."""
+"""The identifier is unique per aggregate. Must be immutable and hashable, e.g., 'int', 'UUID', tuple, etc.
+Remember that an identifier should match domain needs; it doesn't have to always be an integer or UUID."""
 
 
 class Identifiable(Protocol, Generic[Identifier]):
