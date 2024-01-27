@@ -108,7 +108,7 @@ Timestamp: TypeAlias = float
 # NOTE PEP 695 type aliases are not yet supported by Mypy (2023-01-08)
 
 
-Identifier = TypeVar("Identifier")
+Identifier = TypeVar("Identifier", covariant=True)
 """The identifier is unique per aggregate. Must be immutable and hashable, e.g., 'int', 'UUID', tuple, etc.
 Remember that an identifier should match domain needs; it doesn't have to always be an integer or UUID."""
 
@@ -159,7 +159,7 @@ class Entity(ABC, Generic[Identifier]):
     # def to_json(self): return NotImplemented
 
 
-EntityType = TypeVar("EntityType", bound=Entity)
+EntityType = TypeVar("EntityType", bound=Entity, covariant=True)
 
 #                                Persistence                                #
 # ######################################################################### #
