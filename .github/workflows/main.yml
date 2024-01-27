@@ -42,6 +42,11 @@ jobs:
             - name: Check format with 'ruff'
               run: |
                   ruff format .
+                  
+            - name: Check types with 'mypy'
+              run: |
+                  cd src
+                  mypy --show-column-numbers --namespace-packages --explicit-package-bases .
 
             - name: Test the code
               run: |
