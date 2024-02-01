@@ -113,7 +113,7 @@ Identifier = TypeVar("Identifier", bound=Hashable)
 Remember that an identifier should match domain needs; it doesn't have to always be an integer or UUID."""
 
 
-class Identifiable(Protocol, Generic[Identifier]):
+class Identifiable(Protocol, Generic[Identifier]):  # type: ignore
     """
     Represents an entity with identifier.
     """
@@ -165,7 +165,7 @@ EntityType = TypeVar("EntityType", bound=Entity)
 # ######################################################################### #
 
 
-class Repository(Protocol, Generic[EntityType, Identifier]):
+class Repository(Protocol, Generic[EntityType, Identifier]):  # type: ignore
     """
     The aggregate root entitiy repository protocol.
     """
