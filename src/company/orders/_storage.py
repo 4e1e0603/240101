@@ -146,12 +146,10 @@ class OrderRepository(AbstractRepository[Order, OrderID]):
         statement = """
             select o.id,  o.created, o.user_id, l.product_id, l.quantity 
             from orders o join order_lines l on o.id = l.order_id 
-            and o.created between ? and ?"""
+            and o.created between ? and ? order by o.id"""
         with self.connection as cursor:
             found = cursor.execute(statement, (since, till)).fetchall()
             from itertools import groupby
-
-            found.sort(key=lambda x: x[0])
             # Group values by a key e.g. `{(15, 1542373774, 0): [(11, 1), (9, 1)]`.
             #                                     order            order_lines
             for key, group in groupby(found, key=lambda x: (x[0], x[1], x[2])):
