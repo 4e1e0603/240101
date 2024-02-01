@@ -81,7 +81,7 @@ class User(Entity[UserID]):
         return type(self)(identifier=self.identifier, name=self.name, city=city)
 
 
-class UserRepository(Repository[User]):
+class UserRepository(Repository[User, UserID]):
     """
     The repository protocol for users.
     """
@@ -127,7 +127,7 @@ class Product(Entity[ProductID]):
         return self._price
 
 
-class ProductRepository(Repository[Product]):
+class ProductRepository(Repository[Product, ProductID]):
     """
     The repository protocol for products.
     """
@@ -204,18 +204,18 @@ class Order(Entity[OrderID]):
     @classmethod
     def create(
         cls,
-        order_id: OrderID,
+        identifier: OrderID,
         user_id: UserID,
         order_lines: Iterable[OrderLine],
         created: datetime | Timestamp,
-    ) -> Self | Exception:
+    ) -> Self | DomainError:
         """
         Create a new order with this factory method instead of initializer.
         The factory function returns the entity or error i.e. it does not raise.
         """
         try:
             return cls(
-                identifier=order_id,
+                identifier=identifier,
                 created=created,
                 user_id=user_id,
                 order_lines=order_lines,
@@ -224,7 +224,7 @@ class Order(Entity[OrderID]):
             return DomainError(f"{error}")
 
 
-class OrderRepository(Repository[Order]):
+class OrderRepository(Repository[Order, OrderID]):
     """
     The repository protocol for orders.
     """

@@ -38,6 +38,6 @@ from company.orders._storage import (
     delete_schema as delete_schema,
     ConflictError as ConflictError,
 )
-from company.orders._common import JSONError as JSONError
+from company.orders._common import JSONError as JSONError, DomainError as DomainError
 
 # ^^^^ Reimports: aliases are the trick to keep linters (Pylance) calm about unused imports.

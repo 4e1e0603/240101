@@ -15,6 +15,7 @@ from company.orders import (
     JSONError,
     delete_schema,
     create_schema,
+    DomainError,
 )
 
 
@@ -104,10 +105,14 @@ def main():
         error_state = (1, f"Could not find file {path}")
     except JSONError as error:
         error_state = (2, f"Could not parse record {error}")
+    except KeyError as error:
+        error_state = (3, f"Could not parse record because missing key {error}")
+    except DomainError as error:
+        error_state = (4, f"Could not create entity {error}")
     except ConflictError as error:
-        error_state = (3, f"Record already exists {error}")
+        error_state = (5, f"Record already exists {error}")
     except KeyboardInterrupt:
-        error_state = (4, "Process exited by user")
+        error_state = (6, "Process exited by user")
 
     # TODO Catch other domain errors such as negative product price (ValueError/DomainError).
 

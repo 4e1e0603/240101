@@ -20,7 +20,7 @@ from company.orders._domain import (
     Product,
     ProductRepository,
 )
-from company.orders._common import DateTimeRange, inform, JSONError, Any
+from company.orders._common import DateTimeRange, inform, JSONError, Any, DomainError
 from company.orders._storage import ConflictError
 
 
@@ -68,6 +68,10 @@ class OrderService:
         :param limit: The maximum of users to return.
         :returns: The users with the highest number of purchased products.
         """
+        # DISCUSSION: Is is right to use raw SQL here? Should we provide some other class
+        # as a dependency (e.g. provider) instead of concrete ODBC connection? This query
+        # doesn't fit to any repository and complicates our "perfect" domain driven design :D
+        # STATUS: It works but should be investigated more.
         with connection as cursor:
             found = cursor.execute(
                 """       
@@ -99,7 +103,10 @@ class OrderService:
             lines = file.readlines()
         for index, line in enumerate(lines):
             try:
-                yield json.loads(line)
+                data = json.loads(line)
+                # TODO CHECK THAT JSON HAS PREDEFINED SCHEMA!
+                # We do not want any :class:`KeyError` errors later in the code!
+                yield data
             except ValueError as error:
                 raise JSONError(f"{index}: {line}") from error
 
@@ -110,6 +117,7 @@ class OrderService:
         :param path: A data file to be parsed.
         :raises:
             :class:`JSONError`: when data can't be parsed as JSON.
+            :class:`DomainError`: when entity can't be created from data.
             :class:`ConflictError`: when an order already exists in database.
         """
         # Parse domain entities fro raw data.
@@ -126,7 +134,7 @@ class OrderService:
                 name=record["user"]["name"],
                 city=record["user"]["city"],
             )
-            if not self._user_repository.exists(user):
+            if not self._user_repository.exists(user.identifier):
                 self._user_repository.save(user)
                 inform(self.logger, f"Saved {user}")
 
@@ -138,7 +146,7 @@ class OrderService:
                     name=product_record["name"],
                     price=product_record["price"],
                 )
-                if not self.product_repository.exists(product):
+                if not self.product_repository.exists(product.identifier):
                     self.product_repository.save(product)
                     inform(self.logger, f"Saved {product}")
                 products.append(product)
@@ -148,17 +156,19 @@ class OrderService:
                 OrderLine(product_id=product.identifier, quantity=quantity)
                 for product, quantity in Counter(products).items()
             ]
-            order = Order(
+
+            result: Order | DomainError = Order.create(
                 identifier=int(record["id"]),
                 created=record["created"],
                 user_id=user.identifier,
                 order_lines=order_lines,
             )
-            if self._order_repository.exists(order):
-                raise ConflictError(
-                    f"Order {order.identifier} already exists"
-                )  # TODO Create custom exception class.
-            orders.append(order)
+            if isinstance(result, DomainError):
+                raise result
+
+            if self._order_repository.exists(result.identifier):
+                raise ConflictError(f"Order {result.identifier} already exists")
+            orders.append(result)
             # inform(self.logger, f"Created {order}")
 
         # [4] Store the orders as batch.

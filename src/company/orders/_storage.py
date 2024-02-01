@@ -5,7 +5,15 @@ of repositories for each aggregate. This is a infrastructure (persistence) layer
 
 from typing import Iterator
 
-from company.orders._domain import User, Order, Product, OrderLine
+from company.orders._domain import (
+    User,
+    Order,
+    Product,
+    OrderLine,
+    UserID,
+    ProductID,
+    OrderID,
+)
 from company.orders._common import AbstractRepository, flatten, Timestamp
 
 
@@ -41,7 +49,7 @@ class ConflictError(Exception):
     """Raised when the entity is already present."""
 
 
-class UserRepository(AbstractRepository[User]):
+class UserRepository(AbstractRepository[User, UserID]):
     """
     The repository for users.
     """
@@ -56,17 +64,17 @@ class UserRepository(AbstractRepository[User]):
                 statement, (aggregate.identifier, aggregate.name, aggregate.city)
             )
 
-    def find(self, aggregate: User) -> User | None:
+    def find(self, aggregate_id: UserID) -> User | None:
         return NotImplemented
 
-    def exists(self, aggregate: User) -> bool:
+    def exists(self, aggregate_id: UserID) -> bool:
         statement = "select id from users where users.id = ?;"
         with self.connection as cursor:
-            result = cursor.execute(statement, (aggregate.identifier,))
+            result = cursor.execute(statement, (aggregate_id,))
         return result.fetchone() is not None
 
 
-class ProductRepository(AbstractRepository[Product]):
+class ProductRepository(AbstractRepository[Product, ProductID]):
     """
     The repository fo products.
     """
@@ -81,17 +89,17 @@ class ProductRepository(AbstractRepository[Product]):
                 statement, (aggregate.identifier, aggregate.name, aggregate.price)
             )
 
-    def find(self, aggregate: Product) -> Product | None:
+    def find(self, aggregate_id: ProductID) -> Product | None:
         return NotImplemented
 
-    def exists(self, aggregate: Product) -> bool:
+    def exists(self, aggregate_id: ProductID) -> bool:
         statement = "select id from products where products.id = ?;"
         with self.connection as cursor:
-            result = cursor.execute(statement, (aggregate.identifier,))
+            result = cursor.execute(statement, (aggregate_id,))
         return result.fetchone() is not None
 
 
-class OrderRepository(AbstractRepository[Order]):
+class OrderRepository(AbstractRepository[Order, OrderID]):
     """
     The repository for orders.
     """
@@ -117,13 +125,13 @@ class OrderRepository(AbstractRepository[Order]):
             ]
             cursor.executemany(statement2, flatten(order_lines))
 
-    def find(self, aggregate: Order) -> Order | None:
+    def find(self, aggregate_id: OrderID) -> Order | None:
         return NotImplemented
 
-    def exists(self, aggregate: User) -> bool:
+    def exists(self, aggregate_id: UserID) -> bool:
         statement = "select id from orders where orders.id = ?;"
         with self.connection as cursor:
-            found = cursor.execute(statement, (aggregate.identifier,))
+            found = cursor.execute(statement, (aggregate_id,))
         result = found.fetchone() is not None
         return result
 

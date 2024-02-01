@@ -108,7 +108,7 @@ Timestamp: TypeAlias = float
 # NOTE PEP 695 type aliases are not yet supported by Mypy (2023-01-08)
 
 
-Identifier = TypeVar("Identifier", covariant=True)
+Identifier = TypeVar("Identifier")
 """The identifier is unique per aggregate. Must be immutable and hashable, e.g., 'int', 'UUID', tuple, etc.
 Remember that an identifier should match domain needs; it doesn't have to always be an integer or UUID."""
 
@@ -159,32 +159,31 @@ class Entity(ABC, Generic[Identifier]):
     # def to_json(self): return NotImplemented
 
 
-EntityType = TypeVar("EntityType", bound=Entity, covariant=True)
+EntityType = TypeVar("EntityType", bound=Entity)
 
 #                                Persistence                                #
 # ######################################################################### #
 
 
-class Repository(Generic[EntityType], Protocol):
+class Repository(Protocol, Generic[EntityType, Identifier]):
     """
     The aggregate root entitiy repository protocol.
     """
 
-    def save(self, aggregate) -> None:
+    def save(self, aggregate: EntityType) -> None:
         """
         Save the aggregate root entity to the storage.
 
         :param aggregate: The entity to save.
         """
 
-    def find(self, aggregate) -> EntityType | None:
+    def find(self, aggregate_id: Identifier) -> EntityType | None:
         """
         Find the unique entity matching the predicate.
 
         The predicate must match exactly one or zero entity.
 
-        :param aggregate: The entity to find.
-        :param aggregate: The entity to find.
+        :param aggregate_id: The entity to find.
         :returns: The found entity or `None`.
         """
 
@@ -193,16 +192,16 @@ class Repository(Generic[EntityType], Protocol):
     # ) -> Iterable[EntityType]:
     #     """Find all entities matching the predicate."""
 
-    def exists(self, aggregate) -> bool:
+    def exists(self, aggregate_id: Identifier) -> bool:
         """
         Check if aggregate  root entity exists in storage.
 
-        :param aggregate: The entity to find.
+        :param aggregate_id: The entity to find.
         :returns: The `True` if found, otherwise `False`.
         """
 
 
-class AbstractRepository(ABC, Generic[EntityType]):
+class AbstractRepository(ABC, Generic[EntityType, Identifier]):
     """
     The aggregate root entitiy repository abstract base class.
 
@@ -228,23 +227,23 @@ class AbstractRepository(ABC, Generic[EntityType]):
     @abstractmethod
     def find(
         self,
-        aggregate,
+        aggregate_id: Identifier,
     ) -> EntityType | None:
         """
         Find a aggregate root entity matching the predicate.
 
         The predicate must match exactly one or zero entity.
 
-        :param aggregate: The entity to find.
+        :param aggregate_id: The entity to find.
         :returns: The found entity or `None`.
         """
 
     @abstractmethod
-    def exists(self, aggregate) -> bool:
+    def exists(self, aggregate_id: Identifier) -> bool:
         """
         Check if aggregate root entity exists in the storage.
 
-        :param aggregate: The entity to find.
+        :param aggregate_id: The entity to find.
         :returns: The `True` if found, otherwise `False`.
         """
 
