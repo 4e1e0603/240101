@@ -6,7 +6,7 @@ This can be reused between projects in the future.
 # Mypy is not smart enough to figure out that your decorator calls `abc.abstractmethod`
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Protocol, TypeAlias, Any
+from typing import TypeVar, Generic, Protocol, TypeAlias, Any, Hashable
 from dataclasses import dataclass
 from datetime import datetime
 import inspect
@@ -108,7 +108,7 @@ Timestamp: TypeAlias = float
 # NOTE PEP 695 type aliases are not yet supported by Mypy (2023-01-08)
 
 
-Identifier = TypeVar("Identifier")
+Identifier = TypeVar("Identifier", bound=Hashable)
 """The identifier is unique per aggregate. Must be immutable and hashable, e.g., 'int', 'UUID', tuple, etc.
 Remember that an identifier should match domain needs; it doesn't have to always be an integer or UUID."""
 
@@ -131,7 +131,7 @@ class Entity(ABC, Generic[Identifier]):
     """
 
     def __init__(self, identifier: Identifier):
-        self._identifier = identifier
+        self._identifier: Identifier = identifier
 
     @property
     def identifier(self) -> Identifier:
@@ -203,7 +203,7 @@ class Repository(Protocol, Generic[EntityType, Identifier]):
 
 class AbstractRepository(ABC, Generic[EntityType, Identifier]):
     """
-    The aggregate root entitiy repository abstract base class.
+    The aggregate root entity repository abstract class based on ODBC.
 
     The repository is not responsible for managing connection.
     The connection pool is recommended. The implementation can

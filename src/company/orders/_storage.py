@@ -150,6 +150,8 @@ class OrderRepository(AbstractRepository[Order, OrderID]):
         with self.connection as cursor:
             found = cursor.execute(statement, (since, till)).fetchall()
             from itertools import groupby
+            # This can be slow compared to better scheme e.g. denormalized view and query.
+            # But point of this exercise is not to make fastest code possible.
 
             # Group values by a key e.g. `{(15, 1542373774, 0): [(11, 1), (9, 1)]`.
             #                                     order            order_lines
