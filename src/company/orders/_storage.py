@@ -150,6 +150,7 @@ class OrderRepository(AbstractRepository[Order, OrderID]):
         with self.connection as cursor:
             found = cursor.execute(statement, (since, till)).fetchall()
             from itertools import groupby
+
             # Group values by a key e.g. `{(15, 1542373774, 0): [(11, 1), (9, 1)]`.
             #                                     order            order_lines
             for key, group in groupby(found, key=lambda x: (x[0], x[1], x[2])):
