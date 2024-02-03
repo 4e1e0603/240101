@@ -47,6 +47,8 @@ company-orders --data [file_path] [--verbose]
 The console output should look like this:
 
 ```powershell
+ company-orders --data .\orders.jsonl
+
 ===[TASK 1]===
 
 Import records from file 'orders.jsonl'...
@@ -94,7 +96,7 @@ Order(id=4995,created='2018-11-16 04:47:57')
 
 ===[TASK 3]===
 
-Select top {limit} users with most prodcuts...
+Select top 5 users with most products...
 
 User(city=Singapore,identifier=2,name=User C)
 User(city=Melbourne,identifier=4,name=User E)
@@ -105,16 +107,6 @@ User(city=Kuala Lumpur,identifier=7,name=User H)
 ===[DONE]===
 
 --SUCCESS--
-```
-
-or with some error state:
-
-```powershell
-===[TASK 1]===
-
-Import records from file 'orders.jsonl'...
-
-FAILURE 2: Could not parse record [...]
 ```
 
 ## Installation
