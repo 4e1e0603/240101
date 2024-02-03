@@ -62,13 +62,15 @@ class OrderService:
         yield from result
 
     def search_users_with_most_products(self, connection, limit=3) -> Iterable[User]:
+        # Use some `Provider`(protocol) instead of raw connection object.
+        # It separates this method from knowledge of specific connection/storage type. 
         """
         Retrieve users with the highest number of purchased products in descending order.
 
         :param limit: The maximum of users to return.
         :returns: The users with the highest number of purchased products.
         """
-        # DISCUSSION: Is is right to use raw SQL here? Should we provide some other class
+        # DISCUSSION: Is it right to use raw SQL here? Should we provide some other class
         # as a dependency (e.g. provider) instead of concrete ODBC connection? This query
         # doesn't fit to any repository and complicates our "perfect" domain driven design :D
         # STATUS: It works but should be investigated more.
