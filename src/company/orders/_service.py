@@ -102,15 +102,14 @@ class OrderService:
         :raises :class:`JSONError`: when data can't be parsed as JSON.
         """
         with open(path, encoding="utf8") as file:
-            lines = file.readlines()
-        for index, line in enumerate(lines):
-            try:
-                data = json.loads(line)
-                # TODO CHECK THAT JSON HAS PREDEFINED SCHEMA!
-                # We do not want any :class:`KeyError` errors later in the code!
-                yield data
-            except ValueError as error:
-                raise JSONError(f"{index}: {line}") from error
+            for index, line in enumerate(file):
+                try:
+                    data = json.loads(line)
+                    # TODO CHECK THAT JSON HAS PREDEFINED SCHEMA!
+                    # We do not want any :class:`KeyError` errors later in the code!
+                    yield data
+                except ValueError as error:
+                    raise JSONError(f"{index}: {line}") from error
 
     def batch_insert_orders(self, path: Path) -> None:
         """
