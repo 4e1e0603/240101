@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS users (
 -- The products purchased by customers.
 CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY NOT NULL,
-    name text NOT NULL CHECK(name <> ''),
+    name TEXT NOT NULL CHECK(name <> ''),
     price INTEGER NOT NULL CHECK(price >= 0)
 );
 
