@@ -202,8 +202,8 @@ class Order(Entity[OrderID]):
         return self._products == other._products
 
     @property
-    def total_cost(self) -> float: # Money/Decimal
-        ...
+    def total_cost(self) -> int: # Money/Decimal
+        return NotImplemented
 
     @classmethod
     def create(
