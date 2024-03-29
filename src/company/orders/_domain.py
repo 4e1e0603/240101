@@ -201,6 +201,10 @@ class Order(Entity[OrderID]):
     def has_same_products(self, other: Self) -> bool:
         return self._products == other._products
 
+    @property
+    def total_cost(self) -> float: # Money/Decimal
+        ...
+
     @classmethod
     def create(
         cls,
