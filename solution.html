@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solution &mdash; company-orders  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Explore" href="explore.html" />
+    <link rel="prev" title="company-orders" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            company-orders
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Solution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#domenova-vrstva">Doménová vrstva</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#servisni-vrstva">Servisní vrstva</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#infrastrukturni-vrstva-perzistence">Infrastrukturní vrstva (perzistence)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ukazka-funckionality">Ukázka funckionality</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testovani">Testování</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#poznamky">Poznámky</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="explore.html">Explore</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Package</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">company</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">company-orders</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Solution</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/solution.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solution">
+<h1>Solution<a class="headerlink" href="#solution" title="Link to this heading"></a></h1>
+<p>(czech)</p>
+<p>Vytvořil jsem dle zadání Python balík <code class="docutils literal notranslate"><span class="pre">company-orders</span></code> s jednoduchým konzolovým rozhraním pro ukázku implementovaných funkcí.</p>
+<section id="domenova-vrstva">
+<h2>Doménová vrstva<a class="headerlink" href="#domenova-vrstva" title="Link to this heading"></a></h2>
+<p>Po prostudování datového souboru jsem identifikoval následující <a class="reference external" href="https://martinfowler.com/bliki/DDD_Aggregate.html">agregáty</a> uložené v modulu <code class="docutils literal notranslate"><span class="pre">company.orders._domain.py</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">User</span></code>: Představuje uživatele aplikace či zákazníka, který může objednávat produkty. Model uživatel obsahuje atributy <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">city</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Product</span></code>: Představuje produkt, který uživatel objednává a přidává do výsledné objednávky. Uživatel může jeden produkt objednat i vícekrát, jak je vidět ze zadaného datového souboru. Modul produktu obsahuje atributy <code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>, <code class="docutils literal notranslate"><span class="pre">price</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Order</span></code>: Představuje objednávku uživatele a obsahuje reference na uživatele, který ji vytvořil a dále produkty, které si objednal. Protože se produkty v dodaných datech mohou opakovat,
+nepřidával jsem produkty přímo k objednávce ale vytvořil jsem pomocný hodnotový objekt <code class="docutils literal notranslate"><span class="pre">OrderLine</span></code>, který obsahuje produkt a jejich počet. Samotná třída <code class="docutils literal notranslate"><span class="pre">Order</span></code> neobsahuje referenci na objekt <code class="docutils literal notranslate"><span class="pre">User</span></code> ale jen odkaz na jeho identifikátor. Podobně <code class="docutils literal notranslate"><span class="pre">OrderLine</span></code> obsahuje jen odkaz na identifikátor produktu. Proč to tak je vysvětleno např. v <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p></li>
+</ul>
+<p>Doménová vrstva neobsahuje žádné vstupně/výstupní funkce (metody) a lze ji proto snadno testovat pomocí jednotkových testů. Spolu se samotným doménovým modelem, obsahuje také rozhraní (protokoly) pro perzistenci doménového modelu např. do relační databáze. Zde používám návrhový vzor <a class="reference external" href="https://martinfowler.com/eaaCatalog/repository.html">Repository</a>.</p>
+</section>
+<section id="servisni-vrstva">
+<h2>Servisní vrstva<a class="headerlink" href="#servisni-vrstva" title="Link to this heading"></a></h2>
+<p>Servisní vrstva je uložena v modulu <code class="docutils literal notranslate"><span class="pre">company.orders._service.py</span></code>. a obsahuje hlavní třídu představující aplikační službu a to <code class="docutils literal notranslate"><span class="pre">OrderService</span></code>. Každá z jejích metod reprezentuje požadovanou funkcionalitu aplikace nebo-li <em>use case</em>. Jde v podstatě o jedinou třídu, která by zbalíku mohla být dostupná, protože představuje rozhraní pro práci s celou aplikací.</p>
+<p>Aplikační servisní třída je závislá na dalších třídách spadajícíh do infrastruktury např. konkrétní třídy pro perzistenci (<code class="docutils literal notranslate"><span class="pre">Repository</span></code>).</p>
+<p>Servisní třída přebírá externí data od uživatele systému (např. z konzolového rohraní nebo poslané skrze HTTP/REST), zpracovává je a výsledek operace vrací uživateli. Pokud je aplikace dobře rozvrstvěná, mělo by být jednoduché zaměnit např. zde implementovaé konzolové rozhraní za REST server (mohu doplnit).</p>
+</section>
+<section id="infrastrukturni-vrstva-perzistence">
+<h2>Infrastrukturní vrstva (perzistence)<a class="headerlink" href="#infrastrukturni-vrstva-perzistence" title="Link to this heading"></a></h2>
+<p>Pro ukázaku jsem vytvořil jednoduché databázové schema pomocí SQLite v souboru <code class="docutils literal notranslate"><span class="pre">src/company/orders/schema.sql</span></code>, který je přidán jako data balíku.</p>
+<p>Jak již bylo zmíněno, přístup do databáze je abstrahován pomocí <em>repository pattern</em>. Ty jsou reprezentováný rohraními (protokoly) uloženými v doménové vrstvě a implementací v servisní/infrastrukturní vrstvě <code class="docutils literal notranslate"><span class="pre">company.orders._storage.py</span></code>.</p>
+<p>Lze tak jednoduše implementovat perzistenci pro jiný databázový server nebo ukládání do paměti či souboru.</p>
+<p>V produkční aplikaci by zřejmě chtělo ještě implementovat <em>Unit of Work</em> neboli transakční přístup do úložiště.</p>
+</section>
+<section id="ukazka-funckionality">
+<h2>Ukázka funckionality<a class="headerlink" href="#ukazka-funckionality" title="Link to this heading"></a></h2>
+<p>Demonstrační příklad s jednoduchým konzolovým rohraním je uložen v modulu <code class="docutils literal notranslate"><span class="pre">company.orders.__main__</span></code>. ten obsahuje tři úlohy dle zadání:</p>
+<ol class="arabic simple">
+<li><p>vloží data objednávek ze zadaného souboru (<code class="docutils literal notranslate"><span class="pre">ndjson</span></code>/<code class="docutils literal notranslate"><span class="pre">jsonl</span></code>),</p></li>
+<li><p>vybere objednávky v zadaném časovém období,</p></li>
+<li><p>vybere horních deset uživatelů s nejvíce objednávkami za celou historii.</p></li>
+</ol>
+</section>
+<section id="testovani">
+<h2>Testování<a class="headerlink" href="#testovani" title="Link to this heading"></a></h2>
+<p>Testy se dají rozdělit na jednotkové a integrační. Doménová vrstva se testuje pomocí jednotkových testů. Servisní vrstva, při použití <em>dependency injection</em>, kdy mokujeme nějaké závislé třídy/metody, se dá také jednotkově testovat.</p>
+<p>Pokud bychom ale chtěli testovat reálnou aplikaci, musíme zapojit reálnou databázi např. běžící v kontejneru. To zde zatím není ukázáno.</p>
+<p>Testování servisní vrstvy je pouze nazančeno, ale mohu doplnit/vylepšit.</p>
+</section>
+<section id="poznamky">
+<h2>Poznámky<a class="headerlink" href="#poznamky" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Používám <a class="reference external" href="https://youtu.be/iroXKdSqSPo?si=ZS2LRkEI3accxks5"><em>namespace pakage</em></a> viz <code class="docutils literal notranslate"><span class="pre">company</span></code>.</p></li>
+<li><p>Pro dokumentaci používím <a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>, ta by si zasloužila ještě větší péči a to
+jak dokumentovat více kód balíku s exportovaným API, tak nějaký <em>design decision document</em> atd.</p></li>
+<li><p>Namísto vyhazování výjimek v doménové vrstvě, lze uvažovat o vracení chyby hodnotou např. pomocé speciálního typu <code class="docutils literal notranslate"><span class="pre">Result</span> <span class="pre">=</span> <span class="pre">Value</span> <span class="pre">|</span> <span class="pre">Error</span></code>.</p></li>
+<li><p>V případě produkční služby, je servisní třída většinou schována za REST API (např. pomocí balíku Flask) a nasazena jako kontejner (např. Docker/Podman, Kubernetes).</p></li>
+</ul>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Evans, E. (2004). <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em>. Addison-Wesley. ISBN: 9780321125217</p></li>
+<li><p>Vernon, V. (2013). <em>Implementing Domain-Driven Design</em>. Upper Saddle River, Addison-Wesley. ISBN: 9780321834577</p></li>
+<li><p>Percival H., Gregory B., (2021) . <em>Architecture Patterns with Python</em>, O’Reilly Media. ISBN: 9781492052203</p></li>
+<li><p><a class="reference external" href="https://martinfowler.com/bliki/DomainDrivenDesign.html">https://martinfowler.com/bliki/DomainDrivenDesign.html</a></p></li>
+<li><p><a class="reference external" href="https://ndjson.org/">https://ndjson.org/</a>, <a class="reference external" href="https://jsonlines.org/">https://jsonlines.org/</a></p></li>
+</ul>
+<small>
+<p>Hudba pro code review:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.youtube.com/watch?v=Vmp6e5H_4s8"><em>Metal Gear Solid 2: Sons of Liberty Original Soundtrack – Countdown To Disaster (2001)</em></a></p></li>
+</ul>
+</small>
+<hr class="footnotes docutils" />
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p><em>In general, you should avoid holding object references to other aggregates but rather reference other aggregates by ID.</em></p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="company-orders" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="explore.html" class="btn btn-neutral float-right" title="Explore" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, David Landa.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
